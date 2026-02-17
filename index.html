@@ -3,292 +3,355 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kisan Manager Pro + Cloud</title>
+    <title>Kisan Manager Pro (Nature Theme)</title>
     <style>
         :root {
-            --primary: #2E7D32;
-            --primary-light: #C8E6C9;
-            --accent: #F57C00;
-            --bg: #f0f2f0;
-            --white: #ffffff;
-            --text: #2c3e50;
+            /* Nature Theme Palette */
+            --primary: #2E7D32;       /* Forest Green */
+            --primary-dark: #1B5E20;  /* Deep Leaf */
+            --primary-light: #E8F5E9; /* Pale Mint */
+            --accent: #F9A825;        /* Harvest Yellow/Orange */
+            --bg: #F1F8E9;            /* Light Field Background */
+            --card-bg: #FFFFFF;
+            --text: #333333;
+            --danger: #C62828;        /* Red Clay */
+            --success: #388E3C;       /* Fresh Grass */
+            --border-radius: 12px;
         }
 
         body { 
-            font-family: 'Segoe UI', Roboto, sans-serif; 
-            background: var(--bg);
-            background-image: linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)), 
-                              url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1000&q=80');
-            background-attachment: fixed;
-            background-size: cover;
-            margin: 0; padding: 0; color: var(--text);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: var(--bg); 
+            margin: 0; padding: 0; 
+            color: var(--text); 
         }
-
+        
+        /* Nature Header */
         header { 
-            background: var(--primary); 
-            color: white; padding: 20px; text-align: center; 
-            font-size: 24px; font-weight: bold; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            border-bottom: 4px solid #1b5e20;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark)); 
+            color: white; 
+            padding: 18px; 
+            text-align: center; 
+            font-size: 24px; 
+            font-weight: bold; 
+            box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            letter-spacing: 1px;
         }
 
-        .container { padding: 15px; max-width: 700px; margin: auto; padding-bottom: 100px; }
+        .container { padding: 15px; max-width: 700px; margin: auto; padding-bottom: 90px; }
 
+        /* Organic Tabs */
         .tabs { 
-            display: flex; background: var(--white); 
-            position: sticky; top: 0; z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex; 
+            background: white; 
+            position: sticky; 
+            top: 0; 
+            z-index: 100;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            border-radius: 0 0 15px 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
         }
-
         .tab-btn { 
-            flex: 1; border: none; background: none; padding: 15px 5px;
-            font-size: 13px; font-weight: 600; cursor: pointer;
-            border-bottom: 3px solid transparent; transition: 0.3s;
+            flex: 1; border: none; background: white; padding: 15px 5px;
+            font-size: 13px; font-weight: 700; cursor: pointer; 
+            color: #777;
+            transition: all 0.3s;
+            border-bottom: 4px solid transparent;
+        }
+        .tab-btn.active { 
+            color: var(--primary); 
+            background: var(--primary-light); 
+            border-bottom: 4px solid var(--primary);
         }
 
-        .tab-btn.active { border-bottom: 3px solid var(--primary); color: var(--primary); background: #f9fff9; }
-
+        /* Cards */
         .card { 
-            background: rgba(255, 255, 255, 0.95); 
-            padding: 20px; border-radius: 12px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08); 
-            margin-bottom: 20px; border-top: 5px solid var(--primary);
+            background: var(--card-bg); 
+            padding: 20px; 
+            border-radius: var(--border-radius); 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
+            margin-bottom: 20px; 
+            border-top: 5px solid var(--primary);
+            border: 1px solid #e0e0e0;
         }
 
-        .card-orange { border-top-color: var(--accent); }
+        h3 { 
+            margin: 0 0 15px 0; 
+            color: var(--primary-dark); 
+            font-size: 19px; 
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 8px;
+        }
 
-        h3 { margin-top: 0; color: var(--primary); display: flex; align-items: center; gap: 10px; }
-
-        label { font-size: 11px; font-weight: bold; color: #666; text-transform: uppercase; margin-bottom: 5px; display: block; }
-
+        label { 
+            font-size: 12px; 
+            font-weight: 600; 
+            color: #558b2f; /* Olive Green text for labels */
+            display: block; 
+            margin-bottom: 6px; 
+            margin-top: 10px;
+        }
+        
         input, select { 
-            width: 100%; padding: 12px; margin-bottom: 15px; 
-            border: 1px solid #ccc; border-radius: 8px; 
-            font-size: 15px; background: #fff;
+            width: 100%; padding: 12px; margin-bottom: 5px; 
+            border: 1px solid #c5e1a5; /* Light green border */
+            border-radius: 8px; 
+            box-sizing: border-box;
+            background: #fff;
+            font-size: 15px;
+            transition: border 0.3s;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 5px rgba(46, 125, 50, 0.2);
         }
 
+        /* Input Group for Work Type */
+        .input-group { display: flex; gap: 8px; margin-bottom: 12px; }
+        .input-group select { width: 40%; margin-bottom: 0; }
+        .input-group input { width: 60%; margin-bottom: 0; }
+
+        /* Buttons */
         button.action-btn { 
-            width: 100%; background: var(--primary); color: white; 
-            padding: 14px; border: none; border-radius: 8px; 
-            font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s;
+            width: 100%; 
+            background: linear-gradient(to bottom, #43a047, #2e7d32);
+            color: white; 
+            padding: 14px; 
+            border: none; 
+            border-radius: 8px; 
+            font-size: 16px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            margin-top: 10px;
+            box-shadow: 0 4px 6px rgba(46, 125, 50, 0.2);
+            transition: transform 0.1s;
         }
-
         button.action-btn:active { transform: scale(0.98); }
 
-        .btn-blue { background: #1976D2 !important; }
-        .btn-orange { background: var(--accent) !important; }
-        .btn-red { background: #d32f2f !important; }
-
-        .btn-small { padding: 5px 10px; font-size: 11px; border-radius: 4px; border: none; color: white; cursor: pointer; }
-
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th { background: var(--primary-light); padding: 10px; text-align: left; font-size: 12px; }
-        td { padding: 10px; border-bottom: 1px solid #eee; font-size: 13px; background: #fff; }
-
-        .sync-indicator { 
-            background: #e8f5e9; padding: 10px; border-radius: 8px; 
-            text-align: center; margin-bottom: 15px; font-size: 12px; color: var(--primary); font-weight: bold;
+        .btn-blue { background: linear-gradient(to bottom, #42A5F5, #1976D2) !important; }
+        .btn-orange { background: linear-gradient(to bottom, #FFA726, #F57C00) !important; }
+        .btn-red { background: linear-gradient(to bottom, #ef5350, #c62828) !important; }
+        .btn-green { background: linear-gradient(to bottom, #66bb6a, #2e7d32) !important; }
+        
+        .btn-small { 
+            padding: 6px 12px; 
+            font-size: 12px; 
+            border-radius: 6px; 
+            border: none; 
+            color: white; 
+            cursor: pointer; 
+            margin-left: 4px; 
         }
 
-        .master-list-item { 
-            display: flex; justify-content: space-between; align-items: center; 
-            background: #fdfdfd; padding: 8px 12px; border: 1px solid #eee; 
-            margin-bottom: 5px; border-radius: 6px; 
-        }
-
-        .edit-mode { outline: 3px solid var(--accent); }
         .hidden { display: none; }
+        
+        /* Tables */
+        table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 14px; margin-top: 10px; }
+        th { 
+            background: var(--primary-light); 
+            color: var(--primary-dark);
+            padding: 10px; 
+            text-align: left; 
+            font-weight: bold;
+            border-bottom: 2px solid #c5e1a5;
+        }
+        td { padding: 10px; border-bottom: 1px solid #f0f0f0; }
+        tr:last-child td { border-bottom: none; }
+        
+        .status-paid { color: var(--success); font-weight: bold; background: #e8f5e9; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
+        .status-pending { color: var(--danger); font-weight: bold; background: #ffebee; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
+
+        .filter-row { display: flex; gap: 10px; margin-bottom: 10px; }
+        .sync-box { background: #E3F2FD; padding: 15px; border-radius: 8px; text-align: center; margin-bottom: 15px; border: 1px solid #90CAF9; color: #1565C0; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<header>🚜 KISAN MANAGER PRO</header>
+<header>🌾 KISAN MANAGER PRO</header>
 
 <div class="tabs">
-    <button id="btn-entry" class="tab-btn active" onclick="showTab('entry')">DAILY WORK</button>
-    <button id="btn-payments" class="tab-btn" onclick="showTab('payments')">ADVANCES</button>
+    <button id="btn-entry" class="tab-btn active" onclick="showTab('entry')">WORK</button>
+    <button id="btn-payments" class="tab-btn" onclick="showTab('payments')">PAYMENTS</button>
     <button id="btn-report" class="tab-btn" onclick="showTab('report')">REPORTS</button>
     <button id="btn-setup" class="tab-btn" onclick="showTab('setup')">SETTINGS</button>
 </div>
 
 <div class="container">
-    <div id="syncMsg" class="sync-indicator">Status: Ready</div>
 
     <div id="entry" class="tab-content">
-        <div class="card" id="workCard">
-            <h3 id="workTitle">🌱 Work Entry</h3>
+        <div class="card">
+            <h3>🌱 Add Daily Work</h3>
             <input type="hidden" id="editWorkId">
-            <label>Work Date</label><input type="date" id="workDate">
+            <label>Date</label><input type="date" id="workDate">
             <label>Worker</label><select id="selWorker" onchange="updateDefaultRate()"></select>
+            
+            <label>Work Type (Select or Type Manual)</label>
+            <div class="input-group">
+                <select id="selWorkType" onchange="fillWorkType()">
+                    <option value="">-- Select --</option>
+                </select>
+                <input type="text" id="manualWorkType" placeholder="Type here...">
+            </div>
+
             <label>Rate (₹)</label><input type="number" id="workRate">
             <label>Farm</label><select id="selFarm"></select>
             <label>Crop</label><select id="selCrop"></select>
-            <label>Work Type</label>
-            <select id="selWorkType" onchange="document.getElementById('manualWorkType').value=this.value"></select>
-            <input type="text" id="manualWorkType" placeholder="Specify Work">
-            <label>Shift</label>
-            <select id="workStatus">
-                <option value="1">Full Day</option>
-                <option value="0.5">Half Day</option>
-                <option value="0">Absent</option>
-            </select>
-            <button class="action-btn" id="btnSaveWork" onclick="saveWork()">Save Record</button>
-            <button class="action-btn btn-red hidden" id="btnCancelWork" onclick="resetForm('work')">Cancel Edit</button>
+            
+            <div style="display:flex; gap:10px;">
+                <div style="flex:1">
+                    <label>Shift</label>
+                    <select id="workStatus">
+                        <option value="1">Full Day</option>
+                        <option value="0.5">Half Day</option>
+                    </select>
+                </div>
+                <div style="flex:1">
+                    <label>Payment Status</label>
+                    <select id="payStatus">
+                        <option value="Pending" selected>🔴 Pending</option>
+                        <option value="Paid">🟢 Paid Now</option>
+                    </select>
+                </div>
+            </div>
+
+            <button class="action-btn" onclick="saveWork()">SAVE WORK</button>
+            <button class="action-btn btn-red hidden" id="btnCancelWork" onclick="resetForm()">CANCEL EDIT</button>
+        </div>
+        <div class="card">
+            <h3>📜 Recent Work Log</h3>
+            <div id="quickWorkLog"></div>
         </div>
     </div>
 
     <div id="payments" class="tab-content hidden">
-        <div class="card card-orange" id="advCard">
-            <h3 id="advTitle">💰 Give Advance</h3>
+        
+        <div class="card" style="border-top-color: var(--danger);">
+            <h3>⚠️ Pending Dues Manager</h3>
+            <p style="font-size:12px; color:#777; margin-top:-10px; margin-bottom:10px; font-style: italic;">Select a worker to clear unpaid dues.</p>
+            <label>Filter by Worker</label>
+            <select id="pendingFilterWorker" onchange="renderPendingDues()"></select>
+            <div id="pendingDuesList" style="margin-top:10px; max-height:300px; overflow-y:auto; border:1px solid #eee; border-radius:8px;"></div>
+        </div>
+
+        <div class="card" style="border-top-color: var(--accent);">
+            <h3>💰 Give Separate Advance</h3>
             <input type="hidden" id="editAdvId">
             <label>Date</label><input type="date" id="advDate">
             <label>Worker</label><select id="selWorkerAdv"></select>
             <label>Amount (₹)</label><input type="number" id="advAmount">
-            <label>Note</label><input type="text" id="advNote" placeholder="e.g. Loan for seeds">
-            <button class="action-btn btn-orange" id="btnSaveAdv" onclick="saveAdvance()">Save Payment</button>
-            <button class="action-btn btn-red hidden" id="btnCancelAdv" onclick="resetForm('adv')">Cancel Edit</button>
+            <label>Note</label><input type="text" id="advNote" placeholder="Reason...">
+            <button class="action-btn btn-orange" onclick="saveAdvance()">SAVE ADVANCE</button>
+            <button class="action-btn btn-red hidden" id="btnCancelAdv" onclick="resetForm()">CANCEL EDIT</button>
         </div>
+
         <div class="card">
-            <h3>📅 History</h3>
+            <h3>📅 Advance History</h3>
             <div id="advHistoryLog"></div>
         </div>
     </div>
 
     <div id="report" class="tab-content hidden">
         <div class="card">
-            <h3>🔍 Filters & Export</h3>
-            <div style="display:flex; gap:10px;">
-                <input type="date" id="filterStart" onchange="renderReports()">
-                <input type="date" id="filterEnd" onchange="renderReports()">
+            <h3>📊 Generate Report</h3>
+            <div class="filter-row">
+                <div style="flex:1"><label>From</label><input type="date" id="rptStart" onchange="renderReports()"></div>
+                <div style="flex:1"><label>To</label><input type="date" id="rptEnd" onchange="renderReports()"></div>
             </div>
-            <select id="filterCrop" onchange="renderReports()"></select>
-            <button class="action-btn btn-blue" onclick="exportToCSV()">📊 Download Report (Excel)</button>
+            <label>Filter by Crop</label>
+            <select id="rptCrop" onchange="renderReports()"></select>
+            
+            <div id="reportSummary" style="margin-top:15px; border-top: 1px dashed #ccc; padding-top:10px;"></div>
+            <button class="action-btn btn-blue" onclick="exportCSV()" style="margin-top:15px">📥 Download Excel</button>
         </div>
-        <div class="card"><h3>💳 Net Balances</h3><div id="paymentSummary"></div></div>
-        <div class="card"><h3>📜 Activity Log</h3><div id="historyLog"></div></div>
     </div>
 
     <div id="setup" class="tab-content hidden">
+        
         <div class="card">
-            <h3>☁️ Cloud Sync</h3>
-            <input type="text" id="scriptUrl" placeholder="Google Script URL">
-            <button class="action-btn btn-blue" onclick="saveUrl()">Save Cloud Link</button>
-            <button class="action-btn btn-orange" onclick="syncWithCloud()">🔄 Sync with Sheets</button>
+            <h3>☁️ Cloud Backup</h3>
+            <div class="sync-box" id="syncStatus">Status: Offline</div>
+            <input type="text" id="cloudUrl" placeholder="Google Script URL">
+            <button class="action-btn btn-blue" onclick="saveCloudUrl()">Save URL</button>
+            <button class="action-btn btn-orange" onclick="syncWithCloud()">🔄 Sync Now</button>
         </div>
 
         <div class="card">
-            <h3>👥 Master List Management</h3>
-            <label>New Item Name</label>
-            <input type="text" id="setupMasterInput" placeholder="Name">
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
-                <button class="action-btn btn-blue" onclick="addNewItem('workers')">Add Worker</button>
-                <button class="action-btn btn-blue" onclick="addNewItem('farms')">Add Farm</button>
-                <button class="action-btn btn-blue" onclick="addNewItem('crops')">Add Crop</button>
-                <button class="action-btn btn-blue" onclick="addNewItem('workTypes')">Add Work</button>
+            <h3>⚙️ Master Lists</h3>
+            <input type="text" id="masterInput" placeholder="Enter Name...">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:15px;">
+                <button class="action-btn btn-blue" style="margin:0; font-size:14px;" onclick="addItem('workers')">Add Worker</button>
+                <button class="action-btn btn-blue" style="margin:0; font-size:14px;" onclick="addItem('farms')">Add Farm</button>
+                <button class="action-btn btn-blue" style="margin:0; font-size:14px;" onclick="addItem('crops')">Add Crop</button>
+                <button class="action-btn btn-blue" style="margin:0; font-size:14px;" onclick="addItem('workTypes')">Add Work Type</button>
             </div>
-            <hr>
-            <h4 style="margin-bottom:5px;">Edit/Remove Existing:</h4>
-            <div id="masterManagerList"></div>
+            <div id="masterListDisplay"></div>
         </div>
     </div>
+
 </div>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('kisanDB')) || {
-        workers: [], farms: [], crops: [], workTypes: [], entries: [], advances: []
-    };
+    // --- DATABASE INIT ---
+    let db = { workers: [], farms: [], crops: [], workTypes: ['Weeding', 'Harvesting', 'Sowing', 'Spray'], entries: [], advances: [] };
 
-    function saveLocal() { localStorage.setItem('kisanDB', JSON.stringify(db)); }
+    try {
+        const saved = localStorage.getItem('kisanDB');
+        if(saved) {
+            const parsed = JSON.parse(saved);
+            db = { ...db, ...parsed };
+            // Ensure workTypes exists for old users
+            if(!db.workTypes) db.workTypes = ['Weeding', 'Harvesting', 'Sowing', 'Spray'];
+        }
+    } catch(e) { console.log("DB Init Error"); }
 
-    function showTab(tabId) {
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
-        document.getElementById(tabId).classList.remove('hidden');
+    function saveDB() {
+        localStorage.setItem('kisanDB', JSON.stringify(db));
+    }
+
+    // --- TABS ---
+    function showTab(id) {
+        document.querySelectorAll('.tab-content').forEach(d => d.classList.add('hidden'));
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById('btn-' + tabId).classList.add('active');
-        refreshDropdowns();
-        if (tabId === 'report') renderReports();
-        if (tabId === 'payments') renderAdvanceHistory();
-        if (tabId === 'setup') renderMasterManager();
+        document.getElementById(id).classList.remove('hidden');
+        document.getElementById('btn-' + id).classList.add('active');
+        
+        refreshUI();
+        if(id === 'report') renderReports();
+        if(id === 'payments') renderPendingDues();
     }
 
-    // MASTER LIST LOGIC
-    function addNewItem(type) {
-        const val = document.getElementById('setupMasterInput').value.trim();
-        if(!val) return alert("Please enter a name");
-        if(type === 'workers') {
-            db.workers.push({name: val, rate: 0});
-        } else {
-            db[type].push(val);
-        }
-        document.getElementById('setupMasterInput').value = "";
-        saveLocal(); refreshDropdowns(); renderMasterManager();
+    // --- SETTINGS ---
+    function addItem(type) {
+        const val = document.getElementById('masterInput').value.trim();
+        if(!val) return alert("Enter a name!");
+        if(type === 'workers') db.workers.push({name: val, rate: 0});
+        else db[type].push(val);
+        document.getElementById('masterInput').value = "";
+        saveDB(); refreshUI(); alert("Added!");
     }
 
-    function renderMasterManager() {
-        let html = "";
-        const categories = ['workers', 'farms', 'crops', 'workTypes'];
-        categories.forEach(cat => {
-            html += `<div style="background:#e8f5e9; padding:5px; font-weight:bold; font-size:12px; margin-top:10px;">${cat.toUpperCase()}</div>`;
-            db[cat].forEach((item, idx) => {
-                const name = typeof item === 'string' ? item : item.name;
-                html += `<div class="master-list-item">
-                    <span>${name}</span>
-                    <div>
-                        <button class="btn-small btn-blue" onclick="editMasterItem('${cat}', ${idx})">Edit</button>
-                        <button class="btn-small btn-red" onclick="deleteMasterItem('${cat}', ${idx})">Del</button>
-                    </div>
-                </div>`;
-            });
-        });
-        document.getElementById('masterManagerList').innerHTML = html;
-    }
-
-    function deleteMasterItem(cat, idx) {
-        if(confirm("Are you sure? This might affect history calculations.")) {
-            db[cat].splice(idx, 1);
-            saveLocal(); renderMasterManager(); refreshDropdowns();
+    function deleteMaster(type, index) {
+        if(confirm("Delete this item?")) {
+            db[type].splice(index, 1);
+            saveDB(); refreshUI();
         }
     }
 
-    function editMasterItem(cat, idx) {
-        let current = typeof db[cat][idx] === 'string' ? db[cat][idx] : db[cat][idx].name;
-        let newVal = prompt("Edit name:", current);
-        if(newVal) {
-            if(typeof db[cat][idx] === 'string') db[cat][idx] = newVal;
-            else db[cat][idx].name = newVal;
-            saveLocal(); renderMasterManager(); refreshDropdowns();
-        }
+    // --- WORK ENTRY LOGIC ---
+    function fillWorkType() {
+        const select = document.getElementById('selWorkType');
+        const input = document.getElementById('manualWorkType');
+        if(select.value) input.value = select.value;
     }
 
-    function refreshDropdowns() {
-        const fill = (id, list, isWorker) => {
-            const el = document.getElementById(id); if(!el) return;
-            el.innerHTML = '<option value="">-- Select --</option>';
-            list.forEach(item => {
-                const opt = document.createElement('option');
-                opt.value = isWorker ? item.name : item;
-                opt.text = isWorker ? `${item.name}` : item;
-                el.appendChild(opt);
-            });
-        };
-        fill('selWorker', db.workers, true);
-        fill('selWorkerAdv', db.workers, true);
-        fill('selFarm', db.farms, false);
-        fill('selCrop', db.crops, false);
-        fill('selWorkType', db.workTypes, false);
-        const fCrop = document.getElementById('filterCrop');
-        fCrop.innerHTML = '<option value="All">All Crops</option>';
-        db.crops.forEach(c => fCrop.innerHTML += `<option value="${c}">${c}</option>`);
-    }
-
-    function updateDefaultRate() {
-        const w = db.workers.find(x => x.name === document.getElementById('selWorker').value);
-        if(w) document.getElementById('workRate').value = w.rate;
-    }
-
-    // WORK ENTRIES
     function saveWork() {
         const id = document.getElementById('editWorkId').value;
+        const workType = document.getElementById('manualWorkType').value;
+        const isPaid = document.getElementById('payStatus').value === 'Paid';
+
         const entry = {
             id: id ? parseInt(id) : Date.now(),
             date: document.getElementById('workDate').value,
@@ -296,22 +359,27 @@
             rate: parseFloat(document.getElementById('workRate').value) || 0,
             farm: document.getElementById('selFarm').value,
             crop: document.getElementById('selCrop').value,
-            type: document.getElementById('manualWorkType').value || "General",
-            status: parseFloat(document.getElementById('workStatus').value)
+            type: workType || "General",
+            status: parseFloat(document.getElementById('workStatus').value),
+            isPaid: isPaid
         };
-        if(!entry.worker || !entry.date) return alert("Worker and Date are required!");
-        
+
+        if(!entry.date || !entry.worker) return alert("Missing Date or Worker");
+
         if(id) {
             const idx = db.entries.findIndex(e => e.id == id);
-            db.entries[idx] = entry;
+            if(idx > -1) db.entries[idx] = entry;
         } else {
             db.entries.push(entry);
         }
-        saveLocal(); resetForm('work'); alert("Saved!");
+        
+        saveDB(); resetForm(); refreshUI(); 
+        alert("✅ Work Saved Successfully!");
     }
 
     function editWork(id) {
         const e = db.entries.find(x => x.id == id);
+        if(!e) return;
         showTab('entry');
         document.getElementById('editWorkId').value = e.id;
         document.getElementById('workDate').value = e.date;
@@ -319,13 +387,58 @@
         document.getElementById('workRate').value = e.rate;
         document.getElementById('selFarm').value = e.farm;
         document.getElementById('selCrop').value = e.crop;
-        document.getElementById('manualWorkType').value = e.type;
-        document.getElementById('workStatus').value = e.status;
-        document.getElementById('workCard').classList.add('edit-mode');
+        document.getElementById('manualWorkType').value = e.type || "";
+        document.getElementById('payStatus').value = e.isPaid ? "Paid" : "Pending";
         document.getElementById('btnCancelWork').classList.remove('hidden');
     }
 
-    // ADVANCES
+    function deleteWork(id) {
+        if(confirm("Delete this entry?")) {
+            db.entries = db.entries.filter(e => e.id !== id);
+            saveDB(); refreshUI();
+        }
+    }
+
+    // --- PAYMENTS & DUES LOGIC ---
+    function renderPendingDues() {
+        const filterW = document.getElementById('pendingFilterWorker').value;
+        const listDiv = document.getElementById('pendingDuesList');
+        
+        let html = `<table style="font-size:12px;"><tr><th>Date/Work</th><th>Amt</th><th>Action</th></tr>`;
+        
+        let pendingCount = 0;
+        db.entries.slice().reverse().forEach(e => {
+            if(!e.isPaid) {
+                if(filterW && e.worker !== filterW) return;
+
+                const amt = e.rate * e.status;
+                html += `<tr>
+                    <td>${e.date}<br><b>${e.worker}</b><br><small style="color:#666">${e.type}</small></td>
+                    <td style="color:#C62828; font-weight:bold;">₹${amt}</td>
+                    <td><button class="btn-small btn-green" onclick="markAsPaid(${e.id})">Mark Paid</button></td>
+                </tr>`;
+                pendingCount++;
+            }
+        });
+
+        if(pendingCount === 0) html = "<div style='padding:20px; text-align:center; color:#888;'>✅ No pending dues found.</div>";
+        else html += "</table>";
+        
+        listDiv.innerHTML = html;
+    }
+
+    function markAsPaid(id) {
+        if(confirm("Mark this work as PAID? \n(This will remove it from the pending list)")) {
+            const idx = db.entries.findIndex(e => e.id == id);
+            if(idx > -1) {
+                db.entries[idx].isPaid = true;
+                saveDB();
+                renderPendingDues();
+                refreshUI();
+            }
+        }
+    }
+
     function saveAdvance() {
         const id = document.getElementById('editAdvId').value;
         const adv = {
@@ -335,119 +448,189 @@
             amount: parseFloat(document.getElementById('advAmount').value) || 0,
             note: document.getElementById('advNote').value
         };
-        if(!adv.worker || !adv.amount) return alert("Amount and Worker required!");
+
+        if(!adv.date || !adv.worker || !adv.amount) return alert("Missing Data");
 
         if(id) {
             const idx = db.advances.findIndex(a => a.id == id);
-            db.advances[idx] = adv;
+            if(idx > -1) db.advances[idx] = adv;
         } else {
             db.advances.push(adv);
         }
-        saveLocal(); resetForm('adv'); renderAdvanceHistory(); alert("Advance Saved!");
+
+        saveDB(); resetForm(); refreshUI(); 
+        alert("✅ Advance Saved!");
     }
 
     function editAdv(id) {
         const a = db.advances.find(x => x.id == id);
+        if(!a) return;
         showTab('payments');
         document.getElementById('editAdvId').value = a.id;
         document.getElementById('advDate').value = a.date;
         document.getElementById('selWorkerAdv').value = a.worker;
         document.getElementById('advAmount').value = a.amount;
         document.getElementById('advNote').value = a.note;
-        document.getElementById('advCard').classList.add('edit-mode');
         document.getElementById('btnCancelAdv').classList.remove('hidden');
     }
 
-    function resetForm(type) {
-        if(type === 'work') {
-            document.getElementById('editWorkId').value = "";
-            document.getElementById('selWorker').value = "";
-            document.getElementById('workRate').value = "";
-            document.getElementById('manualWorkType').value = "";
-            document.getElementById('workCard').classList.remove('edit-mode');
-            document.getElementById('btnCancelWork').classList.add('hidden');
-        } else {
-            document.getElementById('editAdvId').value = "";
-            document.getElementById('selWorkerAdv').value = "";
-            document.getElementById('advAmount').value = "";
-            document.getElementById('advNote').value = "";
-            document.getElementById('advCard').classList.remove('edit-mode');
-            document.getElementById('btnCancelAdv').classList.add('hidden');
+    function deleteAdv(id) {
+        if(confirm("Delete this advance?")) {
+            db.advances = db.advances.filter(a => a.id !== id);
+            saveDB(); refreshUI();
         }
     }
 
+    // --- REPORTS ---
     function renderReports() {
-        const start = document.getElementById('filterStart').value;
-        const end = document.getElementById('filterEnd').value;
-        const cropF = document.getElementById('filterCrop').value;
+        const start = document.getElementById('rptStart').value;
+        const end = document.getElementById('rptEnd').value;
+        const cropFilter = document.getElementById('rptCrop').value;
+
+        let html = `<table><tr><th>Worker</th><th>Pending</th><th>Adv</th><th>Net Pay</th></tr>`;
         
-        let html = `<table><tr><th>Worker</th><th>Earned</th><th>Bal.</th></tr>`;
         db.workers.forEach(w => {
-            const earned = db.entries
-                .filter(e => e.worker === w.name && (!start || e.date >= start) && (!end || e.date <= end) && (cropF === 'All' || e.crop === cropF))
-                .reduce((s, e) => s + (e.rate * e.status), 0);
-            const paid = db.advances.filter(a => a.worker === w.name).reduce((s, a) => s + a.amount, 0);
-            html += `<tr><td>${w.name}</td><td>₹${earned}</td><td style="color:red"><b>₹${earned-paid}</b></td></tr>`;
-        });
-        document.getElementById('paymentSummary').innerHTML = html + `</table>`;
+            const pendingWorkAmt = db.entries
+                .filter(e => e.worker === w.name && !e.isPaid)
+                .filter(e => (!start || e.date >= start) && (!end || e.date <= end))
+                .filter(e => (cropFilter === 'All' || e.crop === cropFilter))
+                .reduce((sum, e) => sum + (e.rate * e.status), 0);
 
-        let hHtml = `<table><tr><th>Date/Worker</th><th>Amt</th><th>Action</th></tr>`;
-        db.entries.slice().reverse().forEach(e => {
-            if((!start || e.date >= start) && (!end || e.date <= end) && (cropF === 'All' || e.crop === cropF)) {
-                hHtml += `<tr><td>${e.date}<br><b>${e.worker}</b></td><td>₹${e.rate * e.status}</td>
-                <td><button class="btn-small btn-blue" onclick="editWork(${e.id})">Edit</button>
-                <button class="btn-small btn-red" onclick="deleteItem('entries', ${e.id})">Del</button></td></tr>`;
-            }
+            const advancesAmt = db.advances
+                .filter(a => a.worker === w.name)
+                .filter(a => (!start || a.date >= start) && (!end || a.date <= end))
+                .reduce((sum, a) => sum + a.amount, 0);
+
+            const balance = pendingWorkAmt - advancesAmt;
+
+            html += `<tr>
+                <td><b>${w.name}</b></td>
+                <td>₹${pendingWorkAmt}</td>
+                <td>₹${advancesAmt}</td>
+                <td style="color:${balance < 0 ? '#C62828' : '#2E7D32'}"><b>₹${balance}</b></td>
+            </tr>`;
         });
-        document.getElementById('historyLog').innerHTML = hHtml + `</table>`;
+        document.getElementById('reportSummary').innerHTML = html + `</table>`;
+        document.getElementById('reportSummary').innerHTML += `<p style="font-size:11px; color:gray; margin-top:10px;">*Net Pay = (Pending Work) - (Advances)</p>`;
     }
 
-    function renderAdvanceHistory() {
-        let h = `<table><tr><th>Date/Worker</th><th>Amt</th><th>Action</th></tr>`;
-        db.advances.slice().reverse().forEach(a => {
-            h += `<tr><td>${a.date}<br><b>${a.worker}</b><br><small>${a.note}</small></td><td>₹${a.amount}</td>
-            <td><button class="btn-small btn-blue" onclick="editAdv(${a.id})">Edit</button>
-            <button class="btn-small btn-red" onclick="deleteItem('advances', ${a.id})">Del</button></td></tr>`;
-        });
-        document.getElementById('advHistoryLog').innerHTML = h + `</table>`;
-    }
-
-    function deleteItem(cat, id) {
-        if(confirm("Delete this entry?")) {
-            db[cat] = db[cat].filter(x => x.id != id);
-            saveLocal(); renderReports(); renderAdvanceHistory();
-        }
-    }
-
-    function exportToCSV() {
-        let csv = "Date,Worker,Farm,Crop,Type,Amount\n";
-        db.entries.forEach(e => csv += `${e.date},${e.worker},${e.farm},${e.crop},Work,${e.rate*e.status}\n`);
-        db.advances.forEach(a => csv += `${a.date},${a.worker},-,Advance,${a.amount}\n`);
+    function exportCSV() {
+        let csv = "Date,Worker,Type,Amount,Status,Note\n";
+        db.entries.forEach(e => csv += `${e.date},${e.worker},${e.type || 'Work'},${e.rate*e.status},${e.isPaid ? 'Paid' : 'Pending'},-\n`);
+        db.advances.forEach(a => csv += `${a.date},${a.worker},Advance,${a.amount},-,${a.note}\n`);
+        
         const blob = new Blob([csv], { type: 'text/csv' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `Kisan_Report_${new Date().toLocaleDateString()}.csv`;
-        a.click();
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = "Kisan_Report.csv";
+        link.click();
     }
 
-    function saveUrl() { localStorage.setItem('kisan_script_url', document.getElementById('scriptUrl').value); alert("Cloud URL Saved!"); }
+    // --- CLOUD SYNC ---
+    function saveCloudUrl() {
+        localStorage.setItem('kisanCloudUrl', document.getElementById('cloudUrl').value);
+        alert("URL Saved!");
+    }
 
     async function syncWithCloud() {
-        const url = localStorage.getItem('kisan_script_url');
-        if(!url) return alert("Setup Cloud URL first!");
-        document.getElementById('syncMsg').innerText = "⏳ Syncing...";
+        const url = localStorage.getItem('kisanCloudUrl');
+        if(!url) return alert("No Cloud URL Saved");
+        document.getElementById('syncStatus').innerText = "⏳ Syncing...";
         try {
             await fetch(url, { method: 'POST', mode: 'no-cors', body: JSON.stringify(db) });
-            const res = await fetch(url);
-            const data = await res.json();
-            if(data) { db = data; saveLocal(); refreshDropdowns(); document.getElementById('syncMsg').innerText = "✅ Last Sync: " + new Date().toLocaleTimeString(); }
-        } catch (e) { document.getElementById('syncMsg').innerText = "❌ Sync Failed"; }
+            document.getElementById('syncStatus').innerText = "✅ Synced: " + new Date().toLocaleTimeString();
+            alert("Sync Complete!");
+        } catch(e) {
+            document.getElementById('syncStatus').innerText = "❌ Failed";
+        }
+    }
+
+    // --- UI HELPERS ---
+    function refreshUI() {
+        const fill = (id, list, isObj) => {
+            const el = document.getElementById(id);
+            if(!el) return;
+            const old = el.value;
+            el.innerHTML = '<option value="">-- Select --</option>';
+            list.forEach(i => {
+                const val = isObj ? i.name : i;
+                el.innerHTML += `<option value="${val}">${val}</option>`;
+            });
+            if(old) el.value = old;
+        };
+
+        fill('selWorker', db.workers, true);
+        fill('selWorkerAdv', db.workers, true);
+        fill('pendingFilterWorker', db.workers, true);
+        fill('selFarm', db.farms, false);
+        fill('selCrop', db.crops, false);
+        fill('selWorkType', db.workTypes, false); 
+        
+        const rptCrop = document.getElementById('rptCrop');
+        rptCrop.innerHTML = '<option value="All">All Crops</option>';
+        db.crops.forEach(c => rptCrop.innerHTML += `<option value="${c}">${c}</option>`);
+
+        window.updateDefaultRate = () => {
+            const w = db.workers.find(x => x.name === document.getElementById('selWorker').value);
+            if(w) document.getElementById('workRate').value = w.rate;
+        };
+
+        let wHtml = `<table><tr><th>Date/Worker</th><th>Type</th><th>Sts</th><th>Act</th></tr>`;
+        db.entries.slice().reverse().slice(0,10).forEach(e => {
+            const sts = e.isPaid ? '<span class="status-paid">Paid</span>' : '<span class="status-pending">Pend</span>';
+            wHtml += `<tr>
+                <td>${e.date}<br>${e.worker}</td>
+                <td><small>${e.type || '-'}</small></td>
+                <td>${sts}</td>
+                <td><button class="btn-small btn-blue" onclick="editWork(${e.id})">Edit</button>
+                <button class="btn-small btn-red" onclick="deleteWork(${e.id})">X</button></td>
+            </tr>`;
+        });
+        document.getElementById('quickWorkLog').innerHTML = wHtml + `</table>`;
+
+        let aHtml = `<table><tr><th>Date/Worker</th><th>Amt</th><th>Act</th></tr>`;
+        db.advances.slice().reverse().forEach(a => {
+            aHtml += `<tr>
+                <td>${a.date}<br>${a.worker}</td>
+                <td>₹${a.amount}</td>
+                <td><button class="btn-small btn-blue" onclick="editAdv(${a.id})">Edit</button>
+                <button class="btn-small btn-red" onclick="deleteAdv(${a.id})">X</button></td>
+            </tr>`;
+        });
+        document.getElementById('advHistoryLog').innerHTML = aHtml + `</table>`;
+
+        let mHtml = "";
+        ['workers', 'farms', 'crops', 'workTypes'].forEach(k => {
+            mHtml += `<div style="background:#E8F5E9;padding:8px;font-weight:bold;margin-top:10px;border-radius:6px;color:#2E7D32;">${k.toUpperCase()}</div>`;
+            db[k].forEach((item, i) => {
+                const name = typeof item === 'object' ? item.name : item;
+                mHtml += `<div style="display:flex;justify-content:space-between;padding:8px;border-bottom:1px solid #f1f1f1; background:white;">
+                    ${name} <button class="btn-small btn-red" onclick="deleteMaster('${k}',${i})">X</button>
+                </div>`;
+            });
+        });
+        document.getElementById('masterListDisplay').innerHTML = mHtml;
+    }
+
+    function resetForm() {
+        document.getElementById('editWorkId').value = "";
+        document.getElementById('editAdvId').value = "";
+        document.getElementById('btnCancelWork').classList.add('hidden');
+        document.getElementById('btnCancelAdv').classList.add('hidden');
+        document.getElementById('payStatus').value = "Pending";
+        document.querySelectorAll('input').forEach(i => {
+            if(i.type !== 'date' && i.id !== 'cloudUrl') i.value = "";
+        });
     }
 
     window.onload = () => {
-        document.querySelectorAll('input[type="date"]').forEach(i => i.valueAsDate = new Date());
-        refreshDropdowns();
+        document.querySelectorAll('input[type="date"]').forEach(d => d.valueAsDate = new Date());
+        const savedUrl = localStorage.getItem('kisanCloudUrl');
+        if(savedUrl) document.getElementById('cloudUrl').value = savedUrl;
+        refreshUI();
+        renderPendingDues();
     };
+
 </script>
 </body>
 </html>
