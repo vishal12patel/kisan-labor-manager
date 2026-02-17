@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kisan Labor Pro Cloud</title>
+    <title>Kisan Pro Cloud - FIXED</title>
     <style>
         body { font-family: sans-serif; background-color: #f4f4f9; margin: 0; padding: 0; }
         header { background-color: #2E7D32; color: white; padding: 15px; text-align: center; font-size: 20px; font-weight: bold; }
         .container { padding: 15px; max-width: 600px; margin: auto; padding-bottom: 80px; }
         .tabs { display: flex; overflow-x: auto; background: white; padding: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
-        .tab-btn { border: none; background: none; font-size: 14px; padding: 10px; cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap; }
+        .tab-btn { border: none; background: none; font-size: 14px; padding: 10px; cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap; flex: 1; }
         .tab-btn.active { border-bottom: 3px solid #2E7D32; color: #2E7D32; font-weight: bold; }
         .card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 15px; }
         label { font-size: 11px; font-weight: bold; color: #555; text-transform: uppercase; display: block; margin-bottom: 2px;}
@@ -18,55 +18,30 @@
         .btn-blue { background-color: #1976D2 !important; }
         .btn-orange { background-color: #F57C00 !important; }
         .btn-red { background-color: #c62828 !important; }
-        .btn-small { padding: 6px 10px; font-size: 11px; width: auto; margin-top: 5px; cursor: pointer; border-radius: 4px; border: none; color: white; margin-right: 5px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; background: white; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; font-size: 12px; }
-        th { background-color: #e8f5e9; }
         .hidden { display: none; }
-        .sync-indicator { text-align: center; font-size: 12px; color: #2E7D32; margin-bottom: 10px; font-weight: bold; }
+        .sync-indicator { text-align: center; font-size: 12px; color: #2E7D32; margin-bottom: 10px; font-weight: bold; background: #e8f5e9; padding: 5px; border-radius: 4px; }
     </style>
 </head>
 <body>
 
-<header>🚜 Kisan Labor Manager Cloud</header>
+<header>🚜 Kisan Manager Cloud</header>
 
 <div class="tabs">
-    <button class="tab-btn active" onclick="showTab('entry')">Daily Entry</button>
-    <button class="tab-btn" onclick="showTab('payments')">Advances</button>
-    <button class="tab-btn" onclick="showTab('report')">Reports</button>
-    <button class="tab-btn" onclick="showTab('setup')">⚙️ Setup</button>
+    <button id="btn-entry" class="tab-btn active" onclick="showTab('entry')">Daily Entry</button>
+    <button id="btn-payments" class="tab-btn" onclick="showTab('payments')">Advances</button>
+    <button id="btn-report" class="tab-btn" onclick="showTab('report')">Reports</button>
+    <button id="btn-setup" class="tab-btn" onclick="showTab('setup')">⚙️ Setup</button>
 </div>
 
 <div class="container">
-    <div id="syncMsg" class="sync-indicator">Checking Cloud Connection...</div>
-
-    <div id="setup" class="tab-content hidden">
-        <div class="card">
-            <h3>☁️ Cloud Settings</h3>
-            <label>Google Apps Script URL</label>
-            <input type="text" id="scriptUrl" placeholder="Paste your Web App URL here">
-            <button class="action-btn btn-blue" onclick="saveUrl()">Save Link</button>
-            <button class="action-btn btn-orange" onclick="syncWithCloud()">🔄 Sync Now (Cloud Upload/Download)</button>
-        </div>
-        
-        <div class="card">
-            <h3>👥 Add Laborers</h3>
-            <input type="text" id="setupWorker" placeholder="Worker Name">
-            <input type="number" id="setupRate" placeholder="Default Rate">
-            <button class="action-btn" onclick="addItem('workers')">Save Worker</button>
-        </div>
-        <button class="action-btn btn-red" onclick="clearData()">⚠️ Delete Local Data</button>
-    </div>
+    <div id="syncMsg" class="sync-indicator">Status: Local Mode</div>
 
     <div id="entry" class="tab-content">
         <div class="card">
-            <h3 id="formTitle">📝 Daily Work Entry</h3>
-            <input type="hidden" id="editEntryId" value="">
+            <h3>📝 Daily Work Entry</h3>
             <label>Date</label><input type="date" id="workDate">
             <label>Worker</label><select id="selWorker" onchange="updateDefaultRate()"></select>
-            <label>Rate</label><input type="number" id="workRate">
-            <label>Farm</label><select id="selFarm"></select>
-            <label>Crop</label><select id="selCrop"></select>
+            <label>Daily Rate</label><input type="number" id="workRate">
             <label>Status</label>
             <select id="workStatus">
                 <option value="1">Full Day</option>
@@ -80,109 +55,178 @@
         <div class="card">
             <h3>💸 Record Advance</h3>
             <label>Worker</label><select id="selWorkerAdv"></select>
-            <label>Amount</label><input type="number" id="advAmount">
+            <label>Amount (₹)</label><input type="number" id="advAmount">
             <button class="action-btn btn-orange" onclick="saveAdvance()">Save Advance</button>
-        </div>
-        <div class="card">
-            <h3>📅 History</h3>
-            <div id="advHistoryLog"></div>
         </div>
     </div>
 
     <div id="report" class="tab-content hidden">
-        <div class="card"><div id="paymentSummary"></div></div>
-        <div class="card"><div id="historyLog"></div></div>
+        <div class="card">
+            <h3>📊 Summary</h3>
+            <div id="paymentSummary">No data yet.</div>
+        </div>
+    </div>
+
+    <div id="setup" class="tab-content hidden">
+        <div class="card">
+            <h3>☁️ Cloud Connection</h3>
+            <p style="font-size: 12px; color: #666;">Paste your Google Script URL here to sync data.</p>
+            <input type="text" id="scriptUrl" placeholder="https://script.google.com/macros/s/...">
+            <button class="action-btn btn-blue" onclick="saveUrl()">1. Save Link</button>
+            <button class="action-btn btn-orange" onclick="syncWithCloud()">2. Sync with Cloud</button>
+        </div>
+        
+        <div class="card">
+            <h3>👥 Add New Worker</h3>
+            <input type="text" id="setupWorkerName" placeholder="Worker Name">
+            <input type="number" id="setupWorkerRate" placeholder="Default Daily Rate">
+            <button class="action-btn" onclick="addNewWorker()">Add Worker</button>
+        </div>
+        <button class="action-btn btn-red" onclick="clearData()">⚠️ Delete Everything</button>
     </div>
 </div>
 
 <script>
-    const SCRIPT_URL_KEY = 'kisan_script_url';
+    // Database initialization
     let db = JSON.parse(localStorage.getItem('kisanDB')) || {
-        workers: [], farms: [], crops: [], entries: [], advances: []
+        workers: [], entries: [], advances: []
     };
 
-    function saveLocal() {
-        localStorage.setItem('kisanDB', JSON.stringify(db));
-    }
-
-    function saveUrl() {
-        const url = document.getElementById('scriptUrl').value;
-        localStorage.setItem(SCRIPT_URL_KEY, url);
-        alert("Link Saved!");
-        syncWithCloud();
-    }
-
-    async function syncWithCloud() {
-        const url = localStorage.getItem(SCRIPT_URL_KEY);
-        if (!url) {
-            document.getElementById('syncMsg').innerText = "⚠️ Setup Cloud URL in Settings";
-            return;
+    // Tab Switching Logic (FIXED)
+    function showTab(tabId) {
+        // Hide all contents
+        const contents = document.getElementsByClassName('tab-content');
+        for (let content of contents) {
+            content.classList.add('hidden');
         }
+        
+        // Show selected content
+        document.getElementById(tabId).classList.remove('hidden');
 
-        document.getElementById('syncMsg').innerText = "⏳ Syncing with Cloud...";
-
-        try {
-            // 1. Upload local data
-            await fetch(url, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: JSON.stringify(db)
-            });
-
-            // 2. Download latest data
-            const response = await fetch(url);
-            const cloudData = await response.json();
-            
-            if (cloudData) {
-                db = cloudData;
-                saveLocal();
-                refreshDropdowns();
-                document.getElementById('syncMsg').innerText = "✅ Cloud Synced: " + new Date().toLocaleTimeString();
-            }
-        } catch (e) {
-            document.getElementById('syncMsg').innerText = "❌ Sync Failed (Check Internet)";
+        // Update active button style
+        const buttons = document.getElementsByClassName('tab-btn');
+        for (let btn of buttons) {
+            btn.classList.remove('active');
         }
+        document.getElementById('btn-' + tabId).classList.add('active');
+
+        if (tabId === 'setup') {
+            document.getElementById('scriptUrl').value = localStorage.getItem('kisan_script_url') || "";
+        }
+        refreshDropdowns();
+        if (tabId === 'report') renderReports();
     }
 
-    // --- REUSE YOUR EXISTING LOGIC ---
-    function addItem(key) {
-        const input = document.getElementById('setupWorker');
-        const rate = document.getElementById('setupRate').value;
-        if(key === 'workers') db.workers.push({name: input.value, rate: parseFloat(rate)});
-        saveLocal(); input.value = ''; refreshDropdowns();
+    // Worker Logic
+    function addNewWorker() {
+        const name = document.getElementById('setupWorkerName').value;
+        const rate = document.getElementById('setupWorkerRate').value;
+        if (!name) return alert("Enter Name");
+        db.workers.push({name: name, rate: parseFloat(rate) || 0});
+        saveLocal();
+        document.getElementById('setupWorkerName').value = '';
+        document.getElementById('setupWorkerRate').value = '';
+        alert("Worker Added!");
+        refreshDropdowns();
     }
 
     function refreshDropdowns() {
-        fillSelect('selWorker', db.workers, true);
-        fillSelect('selWorkerAdv', db.workers, true);
-        fillSelect('selFarm', db.farms);
-        fillSelect('selCrop', db.crops);
-    }
-
-    function fillSelect(id, list, isWorker = false) {
-        const el = document.getElementById(id);
-        if(!el) return;
-        el.innerHTML = '<option value="">-- Select --</option>';
-        list.forEach(item => {
-            const opt = document.createElement('option');
-            opt.value = isWorker ? item.name : item;
-            opt.text = isWorker ? `${item.name} (₹${item.rate})` : item;
-            el.appendChild(opt);
+        const selects = ['selWorker', 'selWorkerAdv'];
+        selects.forEach(id => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.innerHTML = '<option value="">-- Select Worker --</option>';
+            db.workers.forEach(w => {
+                el.innerHTML += `<option value="${w.name}">${w.name} (₹${w.rate})</option>`;
+            });
         });
     }
 
+    function updateDefaultRate() {
+        const workerName = document.getElementById('selWorker').value;
+        const worker = db.workers.find(w => w.name === workerName);
+        if (worker) document.getElementById('workRate').value = worker.rate;
+    }
+
+    // Save Logic
     function saveWork() {
         const entry = {
             id: Date.now(),
             date: document.getElementById('workDate').value,
             worker: document.getElementById('selWorker').value,
-            total: (parseFloat(document.getElementById('workRate').value) || 0) * parseFloat(document.getElementById('workStatus').value)
+            rate: parseFloat(document.getElementById('workRate').value),
+            status: document.getElementById('workStatus').value
         };
+        if (!entry.worker) return alert("Select a worker");
         db.entries.push(entry);
         saveLocal();
-        alert("Saved Locally! Syncing...");
-        syncWithCloud();
+        alert("Entry Saved Locally!");
     }
 
-    function showTab(tabId) {
-        document.querySelectorAll('.tab-content
+    function saveAdvance() {
+        const adv = {
+            id: Date.now(),
+            worker: document.getElementById('selWorkerAdv').value,
+            amount: parseFloat(document.getElementById('advAmount').value)
+        };
+        if (!adv.worker || !adv.amount) return alert("Check Worker/Amount");
+        db.advances.push(adv);
+        saveLocal();
+        alert("Advance Saved Locally!");
+    }
+
+    function saveLocal() {
+        localStorage.setItem('kisanDB', JSON.stringify(db));
+    }
+
+    // Cloud Logic
+    function saveUrl() {
+        const url = document.getElementById('scriptUrl').value;
+        localStorage.setItem('kisan_script_url', url);
+        alert("Cloud URL Saved!");
+    }
+
+    async function syncWithCloud() {
+        const url = localStorage.getItem('kisan_script_url');
+        if (!url) return alert("Please paste the Google Script URL first!");
+
+        document.getElementById('syncMsg').innerText = "⏳ Syncing...";
+        
+        try {
+            // Upload
+            await fetch(url, { method: 'POST', mode: 'no-cors', body: JSON.stringify(db) });
+            
+            // Download
+            const res = await fetch(url);
+            const data = await res.json();
+            if (data) {
+                db = data;
+                saveLocal();
+                refreshDropdowns();
+                document.getElementById('syncMsg').innerText = "✅ Cloud Synced: " + new Date().toLocaleTimeString();
+            }
+        } catch (e) {
+            document.getElementById('syncMsg').innerText = "❌ Sync Error";
+            alert("Connection error. Check your Google Script URL.");
+        }
+    }
+
+    function renderReports() {
+        let html = `<table><tr><th>Worker</th><th>Balance</th></tr>`;
+        db.workers.forEach(w => {
+            const earned = db.entries.filter(e => e.worker === w.name).reduce((s, e) => s + (e.rate * e.status), 0);
+            const paid = db.advances.filter(a => a.worker === w.name).reduce((s, a) => s + a.amount, 0);
+            html += `<tr><td>${w.name}</td><td>₹${earned - paid}</td></tr>`;
+        });
+        document.getElementById('paymentSummary').innerHTML = html + `</table>`;
+    }
+
+    function clearData() { if(confirm("Delete all data?")) { localStorage.clear(); location.reload(); } }
+
+    window.onload = () => {
+        document.getElementById('workDate').valueAsDate = new Date();
+        refreshDropdowns();
+    };
+</script>
+</body>
+</html>
