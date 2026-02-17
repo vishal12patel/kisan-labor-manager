@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kisan Labor Pro Cloud</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f4f4f9; margin: 0; padding: 0; }
+        header { background-color: #2E7D32; color: white; padding: 15px; text-align: center; font-size: 20px; font-weight: bold; }
+        .container { padding: 15px; max-width: 600px; margin: auto; padding-bottom: 80px; }
+        .tabs { display: flex; overflow-x: auto; background: white; padding: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+        .tab-btn { border: none; background: none; font-size: 14px; padding: 10px; cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap; }
+        .tab-btn.active { border-bottom: 3px solid #2E7D32; color: #2E7D32; font-weight: bold; }
+        .card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 15px; }
+        label { font-size: 11px; font-weight: bold; color: #555; text-transform: uppercase; display: block; margin-bottom: 2px;}
+        input, select { width: 100%; padding: 10px; margin: 0 0 12px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-size: 14px;}
+        button.action-btn { width: 100%; background-color: #2E7D32; color: white; padding: 12px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; margin-bottom: 10px; }
+        .btn-blue { background-color: #1976D2 !important; }
+        .btn-orange { background-color: #F57C00 !important; }
+        .btn-red { background-color: #c62828 !important; }
+        .btn-small { padding: 6px 10px; font-size: 11px; width: auto; margin-top: 5px; cursor: pointer; border-radius: 4px; border: none; color: white; margin-right: 5px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; background: white; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; font-size: 12px; }
+        th { background-color: #e8f5e9; }
+        .hidden { display: none; }
+        .sync-indicator { text-align: center; font-size: 12px; color: #2E7D32; margin-bottom: 10px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<header>🚜 Kisan Labor Manager Cloud</header>
+
+<div class="tabs">
+    <button class="tab-btn active" onclick="showTab('entry')">Daily Entry</button>
+    <button class="tab-btn" onclick="showTab('payments')">Advances</button>
+    <button class="tab-btn" onclick="showTab('report')">Reports</button>
+    <button class="tab-btn" onclick="showTab('setup')">⚙️ Setup</button>
+</div>
+
+<div class="container">
+    <div id="syncMsg" class="sync-indicator">Checking Cloud Connection...</div>
+
+    <div id="setup" class="tab-content hidden">
+        <div class="card">
+            <h3>☁️ Cloud Settings</h3>
+            <label>Google Apps Script URL</label>
+            <input type="text" id="scriptUrl" placeholder="Paste your Web App URL here">
+            <button class="action-btn btn-blue" onclick="saveUrl()">Save Link</button>
+            <button class="action-btn btn-orange" onclick="syncWithCloud()">🔄 Sync Now (Cloud Upload/Download)</button>
+        </div>
+        
+        <div class="card">
+            <h3>👥 Add Laborers</h3>
+            <input type="text" id="setupWorker" placeholder="Worker Name">
+            <input type="number" id="setupRate" placeholder="Default Rate">
+            <button class="action-btn" onclick="addItem('workers')">Save Worker</button>
+        </div>
+        <button class="action-btn btn-red" onclick="clearData()">⚠️ Delete Local Data</button>
+    </div>
+
+    <div id="entry" class="tab-content">
+        <div class="card">
+            <h3 id="formTitle">📝 Daily Work Entry</h3>
+            <input type="hidden" id="editEntryId" value="">
+            <label>Date</label><input type="date" id="workDate">
+            <label>Worker</label><select id="selWorker" onchange="updateDefaultRate()"></select>
+            <label>Rate</label><input type="number" id="workRate">
+            <label>Farm</label><select id="selFarm"></select>
+            <label>Crop</label><select id="selCrop"></select>
+            <label>Status</label>
+            <select id="workStatus">
+                <option value="1">Full Day</option>
+                <option value="0.5">Half Day</option>
+            </select>
+            <button class="action-btn" onclick="saveWork()">Save Entry</button>
+        </div>
+    </div>
+
+    <div id="payments" class="tab-content hidden">
+        <div class="card">
+            <h3>💸 Record Advance</h3>
+            <label>Worker</label><select id="selWorkerAdv"></select>
+            <label>Amount</label><input type="number" id="advAmount">
+            <button class="action-btn btn-orange" onclick="saveAdvance()">Save Advance</button>
+        </div>
+        <div class="card">
+            <h3>📅 History</h3>
+            <div id="advHistoryLog"></div>
+        </div>
+    </div>
+
+    <div id="report" class="tab-content hidden">
+        <div class="card"><div id="paymentSummary"></div></div>
+        <div class="card"><div id="historyLog"></div></div>
+    </div>
+</div>
+
+<script>
+    const SCRIPT_URL_KEY = 'kisan_script_url';
+    let db = JSON.parse(localStorage.getItem('kisanDB')) || {
+        workers: [], farms: [], crops: [], entries: [], advances: []
+    };
+
+    function saveLocal() {
+        localStorage.setItem('kisanDB', JSON.stringify(db));
+    }
+
+    function saveUrl() {
+        const url = document.getElementById('scriptUrl').value;
+        localStorage.setItem(SCRIPT_URL_KEY, url);
+        alert("Link Saved!");
+        syncWithCloud();
+    }
+
+    async function syncWithCloud() {
+        const url = localStorage.getItem(SCRIPT_URL_KEY);
+        if (!url) {
+            document.getElementById('syncMsg').innerText = "⚠️ Setup Cloud URL in Settings";
+            return;
+        }
+
+        document.getElementById('syncMsg').innerText = "⏳ Syncing with Cloud...";
+
+        try {
+            // 1. Upload local data
+            await fetch(url, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify(db)
+            });
+
+            // 2. Download latest data
+            const response = await fetch(url);
+            const cloudData = await response.json();
+            
+            if (cloudData) {
+                db = cloudData;
+                saveLocal();
+                refreshDropdowns();
+                document.getElementById('syncMsg').innerText = "✅ Cloud Synced: " + new Date().toLocaleTimeString();
+            }
+        } catch (e) {
+            document.getElementById('syncMsg').innerText = "❌ Sync Failed (Check Internet)";
+        }
+    }
+
+    // --- REUSE YOUR EXISTING LOGIC ---
+    function addItem(key) {
+        const input = document.getElementById('setupWorker');
+        const rate = document.getElementById('setupRate').value;
+        if(key === 'workers') db.workers.push({name: input.value, rate: parseFloat(rate)});
+        saveLocal(); input.value = ''; refreshDropdowns();
+    }
+
+    function refreshDropdowns() {
+        fillSelect('selWorker', db.workers, true);
+        fillSelect('selWorkerAdv', db.workers, true);
+        fillSelect('selFarm', db.farms);
+        fillSelect('selCrop', db.crops);
+    }
+
+    function fillSelect(id, list, isWorker = false) {
+        const el = document.getElementById(id);
+        if(!el) return;
+        el.innerHTML = '<option value="">-- Select --</option>';
+        list.forEach(item => {
+            const opt = document.createElement('option');
+            opt.value = isWorker ? item.name : item;
+            opt.text = isWorker ? `${item.name} (₹${item.rate})` : item;
+            el.appendChild(opt);
+        });
+    }
+
+    function saveWork() {
+        const entry = {
+            id: Date.now(),
+            date: document.getElementById('workDate').value,
+            worker: document.getElementById('selWorker').value,
+            total: (parseFloat(document.getElementById('workRate').value) || 0) * parseFloat(document.getElementById('workStatus').value)
+        };
+        db.entries.push(entry);
+        saveLocal();
+        alert("Saved Locally! Syncing...");
+        syncWithCloud();
+    }
+
+    function showTab(tabId) {
+        document.querySelectorAll('.tab-content
