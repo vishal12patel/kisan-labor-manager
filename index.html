@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kisan Manager Pro (Nature Theme)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kisan Manager Pro (Nature Redesign)</title>
     <style>
         :root {
-            /* Nature Theme Palette */
+            /* Nature Theme Palette - Modernized */
             --primary: #2E7D32;       /* Forest Green */
             --primary-dark: #1B5E20;  /* Deep Leaf */
             --primary-light: #E8F5E9; /* Pale Mint */
@@ -16,189 +16,177 @@
             --text: #333333;
             --danger: #C62828;        /* Red Clay */
             --success: #388E3C;       /* Fresh Grass */
-            --border-radius: 12px;
+            --blue: #1976D2;          /* Water Blue */
+            --radius: 15px;
+            --shadow: 0 4px 15px rgba(0,0,0,0.08);
         }
 
         body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
             background: var(--bg); 
             margin: 0; padding: 0; 
             color: var(--text); 
+            padding-bottom: 90px; /* Space for bottom nav */
         }
         
-        /* Nature Header */
+        /* Modern Nature Header */
         header { 
             background: linear-gradient(135deg, var(--primary), var(--primary-dark)); 
             color: white; 
-            padding: 18px; 
+            padding: 25px 20px; 
             text-align: center; 
-            font-size: 24px; 
-            font-weight: bold; 
-            box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-            letter-spacing: 1px;
-        }
-
-        .container { padding: 15px; max-width: 700px; margin: auto; padding-bottom: 90px; }
-
-        /* Organic Tabs */
-        .tabs { 
-            display: flex; 
-            background: white; 
-            position: sticky; 
-            top: 0; 
-            z-index: 100;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-            border-radius: 0 0 15px 15px;
-            overflow: hidden;
+            font-size: 22px; 
+            font-weight: 800; 
+            box-shadow: 0 4px 10px rgba(46, 125, 50, 0.3);
+            border-radius: 0 0 25px 25px;
             margin-bottom: 20px;
         }
-        .tab-btn { 
-            flex: 1; border: none; background: white; padding: 15px 5px;
-            font-size: 13px; font-weight: 700; cursor: pointer; 
-            color: #777;
-            transition: all 0.3s;
-            border-bottom: 4px solid transparent;
-        }
-        .tab-btn.active { 
-            color: var(--primary); 
-            background: var(--primary-light); 
-            border-bottom: 4px solid var(--primary);
-        }
 
-        /* Cards */
+        .container { padding: 15px; max-width: 600px; margin: auto; }
+
+        /* Modern Cards */
         .card { 
             background: var(--card-bg); 
             padding: 20px; 
-            border-radius: var(--border-radius); 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
+            border-radius: var(--radius); 
+            box-shadow: var(--shadow); 
             margin-bottom: 20px; 
-            border-top: 5px solid var(--primary);
-            border: 1px solid #e0e0e0;
+            border: 1px solid rgba(0,0,0,0.05);
         }
 
         h3 { 
             margin: 0 0 15px 0; 
             color: var(--primary-dark); 
-            font-size: 19px; 
+            font-size: 18px; 
             border-bottom: 2px solid var(--primary-light);
             padding-bottom: 8px;
+            display: flex; align-items: center; gap: 8px;
         }
 
+        /* Inputs */
         label { 
-            font-size: 12px; 
+            font-size: 13px; 
             font-weight: 600; 
-            color: #558b2f; /* Olive Green text for labels */
+            color: #558b2f; 
             display: block; 
-            margin-bottom: 6px; 
-            margin-top: 10px;
+            margin-bottom: 5px; 
+            margin-top: 12px;
         }
         
         input, select { 
-            width: 100%; padding: 12px; margin-bottom: 5px; 
-            border: 1px solid #c5e1a5; /* Light green border */
-            border-radius: 8px; 
+            width: 100%; padding: 14px; margin-bottom: 5px; 
+            border: 1px solid #c5e1a5; 
+            border-radius: 10px; 
             box-sizing: border-box;
-            background: #fff;
-            font-size: 15px;
-            transition: border 0.3s;
+            background: #FAFAFA;
+            font-size: 16px; /* Prevents zoom on iPhone */
+            transition: all 0.3s;
         }
         input:focus, select:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 5px rgba(46, 125, 50, 0.2);
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
         }
 
-        /* Input Group for Work Type */
-        .input-group { display: flex; gap: 8px; margin-bottom: 12px; }
+        .input-group { display: flex; gap: 10px; margin-bottom: 12px; }
         .input-group select { width: 40%; margin-bottom: 0; }
         .input-group input { width: 60%; margin-bottom: 0; }
 
         /* Buttons */
         button.action-btn { 
             width: 100%; 
-            background: linear-gradient(to bottom, #43a047, #2e7d32);
+            background: var(--primary);
             color: white; 
-            padding: 14px; 
+            padding: 15px; 
             border: none; 
-            border-radius: 8px; 
+            border-radius: 12px; 
             font-size: 16px; 
             font-weight: bold; 
             cursor: pointer; 
-            margin-top: 10px;
+            margin-top: 15px;
             box-shadow: 0 4px 6px rgba(46, 125, 50, 0.2);
             transition: transform 0.1s;
         }
-        button.action-btn:active { transform: scale(0.98); }
+        button.action-btn:active { transform: scale(0.97); }
 
-        .btn-blue { background: linear-gradient(to bottom, #42A5F5, #1976D2) !important; }
-        .btn-orange { background: linear-gradient(to bottom, #FFA726, #F57C00) !important; }
-        .btn-red { background: linear-gradient(to bottom, #ef5350, #c62828) !important; }
-        .btn-green { background: linear-gradient(to bottom, #66bb6a, #2e7d32) !important; }
+        .btn-blue { background: var(--blue) !important; }
+        .btn-orange { background: var(--accent) !important; }
+        .btn-red { background: var(--danger) !important; }
+        .btn-green { background: var(--success) !important; }
         
         .btn-small { 
-            padding: 6px 12px; 
-            font-size: 12px; 
-            border-radius: 6px; 
-            border: none; 
-            color: white; 
-            cursor: pointer; 
-            margin-left: 4px; 
+            padding: 6px 12px; font-size: 12px; border-radius: 6px; 
+            border: none; color: white; cursor: pointer; margin-left: 4px; 
         }
+
+        /* Lists & Tables */
+        .log-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 0; border-bottom: 1px solid #f0f0f0;
+        }
+        .status-paid { background: #E8F5E9; color: #2E7D32; padding: 4px 8px; border-radius: 20px; font-size: 11px; font-weight: bold; }
+        .status-pending { background: #FFEBEE; color: #C62828; padding: 4px 8px; border-radius: 20px; font-size: 11px; font-weight: bold; }
+        
+        table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 10px; }
+        th { color: #777; font-size: 12px; text-align: left; padding-bottom: 5px; }
+        td { padding: 8px 0; border-bottom: 1px solid #eee; }
+
+        /* Floating Bottom Tabs */
+        .tabs { 
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 500px;
+            background: white; 
+            display: flex; justify-content: space-around;
+            padding: 10px; border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            z-index: 100;
+        }
+        .tab-btn { 
+            background: none; border: none; 
+            color: #9E9E9E; font-size: 10px; font-weight: 700; 
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+            cursor: pointer; 
+        }
+        .tab-btn span { font-size: 20px; }
+        .tab-btn.active { color: var(--primary); transform: scale(1.1); transition: 0.2s; }
 
         .hidden { display: none; }
-        
-        /* Tables */
-        table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 14px; margin-top: 10px; }
-        th { 
-            background: var(--primary-light); 
-            color: var(--primary-dark);
-            padding: 10px; 
-            text-align: left; 
-            font-weight: bold;
-            border-bottom: 2px solid #c5e1a5;
-        }
-        td { padding: 10px; border-bottom: 1px solid #f0f0f0; }
-        tr:last-child td { border-bottom: none; }
-        
-        .status-paid { color: var(--success); font-weight: bold; background: #e8f5e9; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
-        .status-pending { color: var(--danger); font-weight: bold; background: #ffebee; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
-
-        .filter-row { display: flex; gap: 10px; margin-bottom: 10px; }
-        .sync-box { background: #E3F2FD; padding: 15px; border-radius: 8px; text-align: center; margin-bottom: 15px; border: 1px solid #90CAF9; color: #1565C0; font-weight: bold; }
+        .sync-box { text-align: center; margin-bottom: 15px; font-size: 14px; color: #555; }
     </style>
 </head>
 <body>
 
-<header>🌾 KISAN MANAGER PRO</header>
-
-<div class="tabs">
-    <button id="btn-entry" class="tab-btn active" onclick="showTab('entry')">WORK</button>
-    <button id="btn-payments" class="tab-btn" onclick="showTab('payments')">PAYMENTS</button>
-    <button id="btn-report" class="tab-btn" onclick="showTab('report')">REPORTS</button>
-    <button id="btn-setup" class="tab-btn" onclick="showTab('setup')">SETTINGS</button>
-</div>
+<header>🌾 Kisan Manager Pro</header>
 
 <div class="container">
 
     <div id="entry" class="tab-content">
         <div class="card">
-            <h3>🌱 Add Daily Work</h3>
+            <h3>📝 Add Daily Work</h3>
             <input type="hidden" id="editWorkId">
             <label>Date</label><input type="date" id="workDate">
             <label>Worker</label><select id="selWorker" onchange="updateDefaultRate()"></select>
             
-            <label>Work Type (Select or Type Manual)</label>
+            <label>Work Type</label>
             <div class="input-group">
                 <select id="selWorkType" onchange="fillWorkType()">
                     <option value="">-- Select --</option>
                 </select>
-                <input type="text" id="manualWorkType" placeholder="Type here...">
+                <input type="text" id="manualWorkType" placeholder="Or type here...">
             </div>
 
             <label>Rate (₹)</label><input type="number" id="workRate">
-            <label>Farm</label><select id="selFarm"></select>
-            <label>Crop</label><select id="selCrop"></select>
+            <div class="input-group" style="margin-top:5px;">
+                <div style="flex:1">
+                    <label style="margin-top:0">Farm</label>
+                    <select id="selFarm"></select>
+                </div>
+                <div style="flex:1">
+                    <label style="margin-top:0">Crop</label>
+                    <select id="selCrop"></select>
+                </div>
+            </div>
             
             <div style="display:flex; gap:10px;">
                 <div style="flex:1">
@@ -209,7 +197,7 @@
                     </select>
                 </div>
                 <div style="flex:1">
-                    <label>Payment Status</label>
+                    <label>Payment</label>
                     <select id="payStatus">
                         <option value="Pending" selected>🔴 Pending</option>
                         <option value="Paid">🟢 Paid Now</option>
@@ -221,28 +209,26 @@
             <button class="action-btn btn-red hidden" id="btnCancelWork" onclick="resetForm()">CANCEL EDIT</button>
         </div>
         <div class="card">
-            <h3>📜 Recent Work Log</h3>
+            <h3>📜 Recent Activity</h3>
             <div id="quickWorkLog"></div>
         </div>
     </div>
 
     <div id="payments" class="tab-content hidden">
-        
-        <div class="card" style="border-top-color: var(--danger);">
-            <h3>⚠️ Pending Dues Manager</h3>
-            <p style="font-size:12px; color:#777; margin-top:-10px; margin-bottom:10px; font-style: italic;">Select a worker to clear unpaid dues.</p>
+        <div class="card" style="border-left: 5px solid var(--danger);">
+            <h3>⚠️ Pending Dues</h3>
             <label>Filter by Worker</label>
             <select id="pendingFilterWorker" onchange="renderPendingDues()"></select>
-            <div id="pendingDuesList" style="margin-top:10px; max-height:300px; overflow-y:auto; border:1px solid #eee; border-radius:8px;"></div>
+            <div id="pendingDuesList" style="margin-top:15px; max-height:300px; overflow-y:auto;"></div>
         </div>
 
-        <div class="card" style="border-top-color: var(--accent);">
-            <h3>💰 Give Separate Advance</h3>
+        <div class="card" style="border-left: 5px solid var(--accent);">
+            <h3>💰 Give Advance</h3>
             <input type="hidden" id="editAdvId">
             <label>Date</label><input type="date" id="advDate">
             <label>Worker</label><select id="selWorkerAdv"></select>
             <label>Amount (₹)</label><input type="number" id="advAmount">
-            <label>Note</label><input type="text" id="advNote" placeholder="Reason...">
+            <label>Note</label><input type="text" id="advNote" placeholder="Reason (Optional)">
             <button class="action-btn btn-orange" onclick="saveAdvance()">SAVE ADVANCE</button>
             <button class="action-btn btn-red hidden" id="btnCancelAdv" onclick="resetForm()">CANCEL EDIT</button>
         </div>
@@ -255,42 +241,68 @@
 
     <div id="report" class="tab-content hidden">
         <div class="card">
-            <h3>📊 Generate Report</h3>
-            <div class="filter-row">
-                <div style="flex:1"><label>From</label><input type="date" id="rptStart" onchange="renderReports()"></div>
-                <div style="flex:1"><label>To</label><input type="date" id="rptEnd" onchange="renderReports()"></div>
+            <h3>📊 Financial Report</h3>
+            <div class="input-group">
+                <input type="date" id="rptStart" onchange="renderReports()">
+                <input type="date" id="rptEnd" onchange="renderReports()">
             </div>
             <label>Filter by Crop</label>
             <select id="rptCrop" onchange="renderReports()"></select>
             
-            <div id="reportSummary" style="margin-top:15px; border-top: 1px dashed #ccc; padding-top:10px;"></div>
-            <button class="action-btn btn-blue" onclick="exportCSV()" style="margin-top:15px">📥 Download Excel</button>
+            <div id="reportSummary" style="margin-top:20px;"></div>
+            <button class="action-btn btn-blue" onclick="exportCSV()">📥 Download Excel</button>
         </div>
     </div>
 
     <div id="setup" class="tab-content hidden">
-        
         <div class="card">
             <h3>☁️ Cloud Backup</h3>
-            <div class="sync-box" id="syncStatus">Status: Offline</div>
-            <input type="text" id="cloudUrl" placeholder="Google Script URL">
-            <button class="action-btn btn-blue" onclick="saveCloudUrl()">Save URL</button>
-            <button class="action-btn btn-orange" onclick="syncWithCloud()">🔄 Sync Now</button>
+            <p style="font-size:12px; color:#666; margin-bottom:10px;">Connect to Google Drive Script</p>
+            <input type="text" id="cloudUrl" placeholder="Paste Google Script Web App URL">
+            <button class="action-btn btn-small" style="margin-top:5px; width:auto;" onclick="saveCloudUrl()">Save URL</button>
+            
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:20px;">
+                <button class="action-btn btn-blue" style="margin-top:0;" onclick="uploadData()">
+                    ⬆️ Upload
+                </button>
+                <button class="action-btn btn-blue" style="margin-top:0;" onclick="downloadData()">
+                    ⬇️ Download
+                </button>
+            </div>
+            <p id="syncStatus" class="sync-box" style="margin-top:15px;">Status: Ready</p>
         </div>
 
         <div class="card">
-            <h3>⚙️ Master Lists</h3>
-            <input type="text" id="masterInput" placeholder="Enter Name...">
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:15px;">
-                <button class="action-btn btn-blue" style="margin:0; font-size:14px;" onclick="addItem('workers')">Add Worker</button>
-                <button class="action-btn btn-blue" style="margin:0; font-size:14px;" onclick="addItem('farms')">Add Farm</button>
-                <button class="action-btn btn-blue" style="margin:0; font-size:14px;" onclick="addItem('crops')">Add Crop</button>
-                <button class="action-btn btn-blue" style="margin:0; font-size:14px;" onclick="addItem('workTypes')">Add Work Type</button>
+            <h3>⚙️ Master Data</h3>
+            <div class="input-group">
+                <input type="text" id="masterInput" placeholder="Add Item Name..." style="margin-bottom:0;">
+                <button class="btn-small btn-green" style="width:50px; border-radius:8px;" onclick="addItem('workers')">+</button>
+            </div>
+            <div style="display:flex; flex-wrap:wrap; gap:5px; margin-bottom:15px;">
+                <button class="btn-small btn-blue" onclick="addItem('workers')">+ Worker</button>
+                <button class="btn-small btn-blue" onclick="addItem('farms')">+ Farm</button>
+                <button class="btn-small btn-blue" onclick="addItem('crops')">+ Crop</button>
+                <button class="btn-small btn-blue" onclick="addItem('workTypes')">+ Work Type</button>
             </div>
             <div id="masterListDisplay"></div>
         </div>
     </div>
 
+</div>
+
+<div class="tabs">
+    <button id="btn-entry" class="tab-btn active" onclick="showTab('entry')">
+        <span>📝</span>Work
+    </button>
+    <button id="btn-payments" class="tab-btn" onclick="showTab('payments')">
+        <span>₹</span>Pay
+    </button>
+    <button id="btn-report" class="tab-btn" onclick="showTab('report')">
+        <span>📊</span>Report
+    </button>
+    <button id="btn-setup" class="tab-btn" onclick="showTab('setup')">
+        <span>⚙️</span>Setup
+    </button>
 </div>
 
 <script>
@@ -302,7 +314,6 @@
         if(saved) {
             const parsed = JSON.parse(saved);
             db = { ...db, ...parsed };
-            // Ensure workTypes exists for old users
             if(!db.workTypes) db.workTypes = ['Weeding', 'Harvesting', 'Sowing', 'Spray'];
         }
     } catch(e) { console.log("DB Init Error"); }
@@ -404,31 +415,33 @@
         const filterW = document.getElementById('pendingFilterWorker').value;
         const listDiv = document.getElementById('pendingDuesList');
         
-        let html = `<table style="font-size:12px;"><tr><th>Date/Work</th><th>Amt</th><th>Action</th></tr>`;
+        let html = ``;
         
         let pendingCount = 0;
         db.entries.slice().reverse().forEach(e => {
             if(!e.isPaid) {
                 if(filterW && e.worker !== filterW) return;
-
                 const amt = e.rate * e.status;
-                html += `<tr>
-                    <td>${e.date}<br><b>${e.worker}</b><br><small style="color:#666">${e.type}</small></td>
-                    <td style="color:#C62828; font-weight:bold;">₹${amt}</td>
-                    <td><button class="btn-small btn-green" onclick="markAsPaid(${e.id})">Mark Paid</button></td>
-                </tr>`;
+                html += `<div class="log-item">
+                    <div>
+                        <div style="font-weight:bold;">${e.worker}</div>
+                        <div style="font-size:12px; color:#666;">${e.date} • ${e.type}</div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="color:var(--danger); font-weight:bold;">₹${amt}</div>
+                        <button class="btn-small btn-blue" style="margin-top:5px;" onclick="markAsPaid(${e.id})">Mark Paid</button>
+                    </div>
+                </div>`;
                 pendingCount++;
             }
         });
 
-        if(pendingCount === 0) html = "<div style='padding:20px; text-align:center; color:#888;'>✅ No pending dues found.</div>";
-        else html += "</table>";
-        
+        if(pendingCount === 0) html = "<div style='padding:20px; text-align:center; color:#888;'>✅ No pending dues.</div>";
         listDiv.innerHTML = html;
     }
 
     function markAsPaid(id) {
-        if(confirm("Mark this work as PAID? \n(This will remove it from the pending list)")) {
+        if(confirm("Mark this work as PAID?")) {
             const idx = db.entries.findIndex(e => e.id == id);
             if(idx > -1) {
                 db.entries[idx].isPaid = true;
@@ -487,7 +500,7 @@
         const end = document.getElementById('rptEnd').value;
         const cropFilter = document.getElementById('rptCrop').value;
 
-        let html = `<table><tr><th>Worker</th><th>Pending</th><th>Adv</th><th>Net Pay</th></tr>`;
+        let html = `<table><tr><th>Worker</th><th>Pend</th><th>Adv</th><th>Net</th></tr>`;
         
         db.workers.forEach(w => {
             const pendingWorkAmt = db.entries
@@ -504,14 +517,13 @@
             const balance = pendingWorkAmt - advancesAmt;
 
             html += `<tr>
-                <td><b>${w.name}</b></td>
-                <td>₹${pendingWorkAmt}</td>
-                <td>₹${advancesAmt}</td>
-                <td style="color:${balance < 0 ? '#C62828' : '#2E7D32'}"><b>₹${balance}</b></td>
+                <td style="font-weight:bold;">${w.name}</td>
+                <td>${pendingWorkAmt}</td>
+                <td>${advancesAmt}</td>
+                <td style="color:${balance < 0 ? 'var(--danger)' : 'var(--primary)'}; font-weight:bold;">₹${balance}</td>
             </tr>`;
         });
         document.getElementById('reportSummary').innerHTML = html + `</table>`;
-        document.getElementById('reportSummary').innerHTML += `<p style="font-size:11px; color:gray; margin-top:10px;">*Net Pay = (Pending Work) - (Advances)</p>`;
     }
 
     function exportCSV() {
@@ -526,22 +538,52 @@
         link.click();
     }
 
-    // --- CLOUD SYNC ---
+    // --- CLOUD SYNC FUNCTIONS (UPDATED) ---
     function saveCloudUrl() {
         localStorage.setItem('kisanCloudUrl', document.getElementById('cloudUrl').value);
         alert("URL Saved!");
     }
 
-    async function syncWithCloud() {
+    async function uploadData() {
         const url = localStorage.getItem('kisanCloudUrl');
         if(!url) return alert("No Cloud URL Saved");
-        document.getElementById('syncStatus').innerText = "⏳ Syncing...";
+        
+        document.getElementById('syncStatus').innerText = "📤 Uploading...";
         try {
-            await fetch(url, { method: 'POST', mode: 'no-cors', body: JSON.stringify(db) });
-            document.getElementById('syncStatus').innerText = "✅ Synced: " + new Date().toLocaleTimeString();
-            alert("Sync Complete!");
+            await fetch(url, { method: 'POST', body: JSON.stringify(db) });
+            document.getElementById('syncStatus').innerText = "✅ Upload Success";
+            alert("Data Uploaded to Cloud!");
         } catch(e) {
-            document.getElementById('syncStatus').innerText = "❌ Failed";
+            console.error(e);
+            document.getElementById('syncStatus').innerText = "❌ Upload Failed";
+            alert("Upload Failed. Check Internet.");
+        }
+    }
+
+    async function downloadData() {
+        const url = localStorage.getItem('kisanCloudUrl');
+        if(!url) return alert("No Cloud URL Saved");
+        
+        document.getElementById('syncStatus').innerText = "📥 Downloading...";
+        try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error("Server Error");
+            const cloudData = await response.json();
+            
+            if(cloudData) {
+                if(confirm("Replace current data with Cloud data?")) {
+                    db = cloudData;
+                    saveDB();
+                    refreshUI();
+                    renderPendingDues();
+                    document.getElementById('syncStatus').innerText = "✅ Download Success";
+                    alert("Data Downloaded & Updated!");
+                }
+            }
+        } catch(e) {
+            console.error(e);
+            document.getElementById('syncStatus').innerText = "❌ Download Failed";
+            alert("Download Failed. Ensure Script Permissions are set to 'Anyone'.");
         }
     }
 
@@ -575,37 +617,52 @@
             if(w) document.getElementById('workRate').value = w.rate;
         };
 
-        let wHtml = `<table><tr><th>Date/Worker</th><th>Type</th><th>Sts</th><th>Act</th></tr>`;
+        // Render Logs with Modern Look
+        let wHtml = ``;
         db.entries.slice().reverse().slice(0,10).forEach(e => {
             const sts = e.isPaid ? '<span class="status-paid">Paid</span>' : '<span class="status-pending">Pend</span>';
-            wHtml += `<tr>
-                <td>${e.date}<br>${e.worker}</td>
-                <td><small>${e.type || '-'}</small></td>
-                <td>${sts}</td>
-                <td><button class="btn-small btn-blue" onclick="editWork(${e.id})">Edit</button>
-                <button class="btn-small btn-red" onclick="deleteWork(${e.id})">X</button></td>
-            </tr>`;
+            wHtml += `<div class="log-item">
+                <div>
+                    <div style="font-weight:600;">${e.worker}</div>
+                    <div style="font-size:12px; color:#666;">${e.date} • ${e.type}</div>
+                </div>
+                <div style="text-align:right;">
+                    ${sts}
+                    <div style="margin-top:5px;">
+                        <button class="btn-small btn-blue" onclick="editWork(${e.id})">✏️</button>
+                        <button class="btn-small btn-red" onclick="deleteWork(${e.id})">✕</button>
+                    </div>
+                </div>
+            </div>`;
         });
-        document.getElementById('quickWorkLog').innerHTML = wHtml + `</table>`;
+        document.getElementById('quickWorkLog').innerHTML = wHtml;
 
-        let aHtml = `<table><tr><th>Date/Worker</th><th>Amt</th><th>Act</th></tr>`;
+        let aHtml = ``;
         db.advances.slice().reverse().forEach(a => {
-            aHtml += `<tr>
-                <td>${a.date}<br>${a.worker}</td>
-                <td>₹${a.amount}</td>
-                <td><button class="btn-small btn-blue" onclick="editAdv(${a.id})">Edit</button>
-                <button class="btn-small btn-red" onclick="deleteAdv(${a.id})">X</button></td>
-            </tr>`;
+            aHtml += `<div class="log-item">
+                <div>
+                    <div style="font-weight:600;">${a.worker}</div>
+                    <div style="font-size:12px; color:#666;">${a.date}</div>
+                </div>
+                <div style="text-align:right;">
+                    <div style="font-weight:bold; color:var(--blue);">₹${a.amount}</div>
+                    <div style="margin-top:5px;">
+                        <button class="btn-small btn-blue" onclick="editAdv(${a.id})">✏️</button>
+                        <button class="btn-small btn-red" onclick="deleteAdv(${a.id})">✕</button>
+                    </div>
+                </div>
+            </div>`;
         });
-        document.getElementById('advHistoryLog').innerHTML = aHtml + `</table>`;
+        document.getElementById('advHistoryLog').innerHTML = aHtml;
 
         let mHtml = "";
         ['workers', 'farms', 'crops', 'workTypes'].forEach(k => {
-            mHtml += `<div style="background:#E8F5E9;padding:8px;font-weight:bold;margin-top:10px;border-radius:6px;color:#2E7D32;">${k.toUpperCase()}</div>`;
+            mHtml += `<div style="background:var(--primary-light); color:var(--primary-dark); padding:6px 10px; font-weight:bold; margin-top:15px; border-radius:6px; font-size:12px;">${k.toUpperCase()}</div>`;
             db[k].forEach((item, i) => {
                 const name = typeof item === 'object' ? item.name : item;
-                mHtml += `<div style="display:flex;justify-content:space-between;padding:8px;border-bottom:1px solid #f1f1f1; background:white;">
-                    ${name} <button class="btn-small btn-red" onclick="deleteMaster('${k}',${i})">X</button>
+                mHtml += `<div class="log-item" style="padding:8px 0;">
+                    <span>${name}</span> 
+                    <button class="btn-small btn-red" onclick="deleteMaster('${k}',${i})">✕</button>
                 </div>`;
             });
         });
