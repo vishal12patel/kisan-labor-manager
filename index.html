@@ -1,693 +1,879 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kisan Manager Pro (Nature Redesign)</title>
-    <style>
-        :root {
-            /* Nature Theme Palette - Modernized */
-            --primary: #2E7D32;       /* Forest Green */
-            --primary-dark: #1B5E20;  /* Deep Leaf */
-            --primary-light: #E8F5E9; /* Pale Mint */
-            --accent: #F9A825;        /* Harvest Yellow/Orange */
-            --bg: #F1F8E9;            /* Light Field Background */
-            --card-bg: #FFFFFF;
-            --text: #333333;
-            --danger: #C62828;        /* Red Clay */
-            --success: #388E3C;       /* Fresh Grass */
-            --blue: #1976D2;          /* Water Blue */
-            --radius: 15px;
-            --shadow: 0 4px 15px rgba(0,0,0,0.08);
-        }
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Kisan Manager Pro - Full Suite</title>
 
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-            background: var(--bg); 
-            margin: 0; padding: 0; 
-            color: var(--text); 
-            padding-bottom: 90px; /* Space for bottom nav */
-        }
-        
-        /* Modern Nature Header */
-        header { 
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark)); 
-            color: white; 
-            padding: 25px 20px; 
-            text-align: center; 
-            font-size: 22px; 
-            font-weight: 800; 
-            box-shadow: 0 4px 10px rgba(46, 125, 50, 0.3);
-            border-radius: 0 0 25px 25px;
-            margin-bottom: 20px;
-        }
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Marcellus&display=swap" rel="stylesheet">
 
-        .container { padding: 15px; max-width: 600px; margin: auto; }
+  <style>
+    /* --- CSS STYLES --- */
+    :root {
+        --color-primary: #4d8b55; 
+        --color-secondary: #3b6b42;
+        --color-bg: #f3fcf4;
+        --font-body: "Open Sans", sans-serif;
+        --font-heading: "Marcellus", serif;
+    }
 
-        /* Modern Cards */
-        .card { 
-            background: var(--card-bg); 
-            padding: 20px; 
-            border-radius: var(--radius); 
-            box-shadow: var(--shadow); 
-            margin-bottom: 20px; 
-            border: 1px solid rgba(0,0,0,0.05);
-        }
+    body {
+        font-family: var(--font-body);
+        background-color: var(--color-bg);
+        margin: 0; padding: 0;
+        color: #333;
+        overflow-x: hidden;
+    }
 
-        h3 { 
-            margin: 0 0 15px 0; 
-            color: var(--primary-dark); 
-            font-size: 18px; 
-            border-bottom: 2px solid var(--primary-light);
-            padding-bottom: 8px;
-            display: flex; align-items: center; gap: 8px;
-        }
+    /* --- HERO --- */
+    .hero {
+        background: url('assets/img/hero-bg.jpg') top center; 
+        background-size: cover;
+        background-color: #3b6b42; 
+        position: relative;
+        padding: 40px 0;
+        margin-bottom: 15px;
+        color: white;
+        text-align: center;
+    }
+    .hero::before { content: ""; position: absolute; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.5); }
+    .hero-content { position: relative; z-index: 1; }
+    .hero h2 { font-family: var(--font-heading); font-size: 28px; margin: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
 
-        /* Inputs */
-        label { 
-            font-size: 13px; 
-            font-weight: 600; 
-            color: #558b2f; 
-            display: block; 
-            margin-bottom: 5px; 
-            margin-top: 12px;
-        }
-        
-        input, select { 
-            width: 100%; padding: 14px; margin-bottom: 5px; 
-            border: 1px solid #c5e1a5; 
-            border-radius: 10px; 
-            box-sizing: border-box;
-            background: #FAFAFA;
-            font-size: 16px; /* Prevents zoom on iPhone */
-            transition: all 0.3s;
-        }
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--primary);
-            background: #fff;
-            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
-        }
+    /* --- HEADER --- */
+    .header {
+        background: white; padding: 10px 15px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        display: flex; justify-content: space-between; align-items: center;
+        position: sticky; top: 0; z-index: 1000;
+    }
+    .logo { display: flex; align-items: center; gap: 8px; }
+    .logo img { height: 35px; width: auto; }
+    .logo h1 { font-family: var(--font-heading); color: var(--color-primary); margin: 0; font-size: 18px; }
 
-        .input-group { display: flex; gap: 10px; margin-bottom: 12px; }
-        .input-group select { width: 40%; margin-bottom: 0; }
-        .input-group input { width: 60%; margin-bottom: 0; }
+    /* --- NAV --- */
+    .navmenu ul { display: flex; list-style: none; padding: 0; margin: 0; gap: 10px; }
+    .navmenu a {
+        text-decoration: none; color: #555; font-weight: 700; font-size: 12px;
+        text-transform: uppercase; cursor: pointer; padding: 6px 8px;
+        border-radius: 4px; transition: 0.3s;
+    }
+    .navmenu a:hover, .navmenu a.active { background: var(--color-primary); color: white; }
 
-        /* Buttons */
-        button.action-btn { 
-            width: 100%; 
-            background: var(--primary);
-            color: white; 
-            padding: 15px; 
-            border: none; 
-            border-radius: 12px; 
-            font-size: 16px; 
-            font-weight: bold; 
-            cursor: pointer; 
-            margin-top: 15px;
-            box-shadow: 0 4px 6px rgba(46, 125, 50, 0.2);
-            transition: transform 0.1s;
-        }
-        button.action-btn:active { transform: scale(0.97); }
+    /* --- LAYOUT --- */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 10px 80px 10px; }
+    .grid-row { display: flex; flex-wrap: wrap; gap: 15px; }
+    .col-form { flex: 2; min-width: 300px; }
+    .col-list { flex: 1; min-width: 300px; }
 
-        .btn-blue { background: var(--blue) !important; }
-        .btn-orange { background: var(--accent) !important; }
-        .btn-red { background: var(--danger) !important; }
-        .btn-green { background: var(--success) !important; }
-        
-        .btn-small { 
-            padding: 6px 12px; font-size: 12px; border-radius: 6px; 
-            border: none; color: white; cursor: pointer; margin-left: 4px; 
-        }
+    .card {
+        background: white; padding: 15px; border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #eee;
+    }
 
-        /* Lists & Tables */
-        .log-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 12px 0; border-bottom: 1px solid #f0f0f0;
-        }
-        .status-paid { background: #E8F5E9; color: #2E7D32; padding: 4px 8px; border-radius: 20px; font-size: 11px; font-weight: bold; }
-        .status-pending { background: #FFEBEE; color: #C62828; padding: 4px 8px; border-radius: 20px; font-size: 11px; font-weight: bold; }
-        
-        table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 10px; }
-        th { color: #777; font-size: 12px; text-align: left; padding-bottom: 5px; }
-        td { padding: 8px 0; border-bottom: 1px solid #eee; }
+    h3 {
+        margin: 0 0 10px 0; font-family: var(--font-heading);
+        color: var(--color-secondary); font-size: 18px;
+        border-bottom: 2px solid #e0e0e0; padding-bottom: 5px;
+    }
 
-        /* Floating Bottom Tabs */
-        .tabs { 
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 500px;
-            background: white; 
-            display: flex; justify-content: space-around;
-            padding: 10px; border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            z-index: 100;
-        }
-        .tab-btn { 
-            background: none; border: none; 
-            color: #9E9E9E; font-size: 10px; font-weight: 700; 
-            display: flex; flex-direction: column; align-items: center; gap: 4px;
-            cursor: pointer; 
-        }
-        .tab-btn span { font-size: 20px; }
-        .tab-btn.active { color: var(--primary); transform: scale(1.1); transition: 0.2s; }
+    /* --- INPUTS --- */
+    label { font-size: 11px; font-weight: 700; color: #555; margin-bottom: 2px; display: block; }
+    input, select {
+        width: 100%; padding: 6px; font-size: 13px; margin-bottom: 8px;
+        border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; background: #fff;
+    }
+    input:focus, select:focus { border-color: var(--color-primary); outline: none; }
+    
+    .row-inputs { display: flex; gap: 10px; }
+    .row-inputs > div { flex: 1; }
 
-        .hidden { display: none; }
-        .sync-box { text-align: center; margin-bottom: 15px; font-size: 14px; color: #555; }
-    </style>
+    /* --- BUTTONS --- */
+    .btn {
+        width: 100%; padding: 10px; font-weight: bold; color: white;
+        background: var(--color-primary); border: none; border-radius: 5px; cursor: pointer;
+    }
+    .btn:hover { background: var(--color-secondary); }
+    .btn-red { background: #e74c3c; }
+    .btn-blue { background: #3498db; }
+    .btn-orange { background: #e67e22; }
+    .btn-mini { padding: 4px 8px; font-size: 11px; width: auto; margin:0; }
+
+    /* --- LISTS --- */
+    .list-container { max-height: 450px; overflow-y: auto; }
+    .log-item {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 8px 0; border-bottom: 1px solid #f5f5f5; font-size: 13px;
+    }
+
+    /* --- REPORT TABLE --- */
+    .report-table {
+        width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px;
+    }
+    .report-table th, .report-table td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+    .report-table th { background-color: #f2f2f2; color: var(--color-secondary); font-weight: 700; }
+    .report-table tr:nth-child(even) { background-color: #fafafa; }
+
+    /* --- MASTERS --- */
+    .master-header { margin-top:15px; font-weight:800; color:var(--color-secondary); font-size:16px; border-bottom:2px solid #ddd; }
+
+    /* --- PROGRESS BAR --- */
+    .progress-container {
+        width: 100%;
+        background-color: #e0e0e0;
+        border-radius: 5px;
+        margin-top: 10px;
+        height: 8px;
+        overflow: hidden;
+    }
+    
+    .progress-bar {
+        width: 0%;
+        height: 100%;
+        background-color: var(--color-primary);
+        transition: width 0.4s ease-in-out;
+    }
+
+    /* --- UTILS --- */
+    .hidden { display: none !important; }
+    #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--color-bg); z-index: 9999; display: flex; justify-content: center; align-items: center; }
+    .login-box { background: white; padding: 30px; border-radius: 10px; text-align: center; width: 300px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+    
+    /* Report Tabs */
+    .rpt-tab-btn { flex:1; padding:8px; border:none; background:#eee; cursor:pointer; font-weight:bold; }
+    .rpt-tab-btn.active { background: var(--color-primary); color:white; }
+
+    /* Mobile Nav */
+    .bottom-tabs { display: none; position: fixed; bottom: 0; left: 0; width: 100%; background: white; border-top: 1px solid #ccc; justify-content: space-around; padding: 8px 0; z-index: 2000; }
+    @media (max-width: 900px) { .navmenu { display: none; } .bottom-tabs { display: flex; } }
+  </style>
 </head>
+
 <body>
 
-<header>🌾 Kisan Manager Pro</header>
-
-<div class="container">
-
-    <div id="entry" class="tab-content">
-        <div class="card">
-            <h3>📝 Add Daily Work</h3>
-            <input type="hidden" id="editWorkId">
-            <label>Date</label><input type="date" id="workDate">
-            <label>Worker</label><select id="selWorker" onchange="updateDefaultRate()"></select>
-            
-            <label>Work Type</label>
-            <div class="input-group">
-                <select id="selWorkType" onchange="fillWorkType()">
-                    <option value="">-- Select --</option>
-                </select>
-                <input type="text" id="manualWorkType" placeholder="Or type here...">
-            </div>
-
-            <label>Rate (₹)</label><input type="number" id="workRate">
-            <div class="input-group" style="margin-top:5px;">
-                <div style="flex:1">
-                    <label style="margin-top:0">Farm</label>
-                    <select id="selFarm"></select>
-                </div>
-                <div style="flex:1">
-                    <label style="margin-top:0">Crop</label>
-                    <select id="selCrop"></select>
-                </div>
-            </div>
-            
-            <div style="display:flex; gap:10px;">
-                <div style="flex:1">
-                    <label>Shift</label>
-                    <select id="workStatus">
-                        <option value="1">Full Day</option>
-                        <option value="0.5">Half Day</option>
-                    </select>
-                </div>
-                <div style="flex:1">
-                    <label>Payment</label>
-                    <select id="payStatus">
-                        <option value="Pending" selected>🔴 Pending</option>
-                        <option value="Paid">🟢 Paid Now</option>
-                    </select>
-                </div>
-            </div>
-
-            <button class="action-btn" onclick="saveWork()">SAVE WORK</button>
-            <button class="action-btn btn-red hidden" id="btnCancelWork" onclick="resetForm()">CANCEL EDIT</button>
-        </div>
-        <div class="card">
-            <h3>📜 Recent Activity</h3>
-            <div id="quickWorkLog"></div>
+    <div id="login-overlay">
+        <div class="login-box">
+            <img src="assets/img/logo.png" alt="Logo" style="height:50px; margin-bottom:10px;" onerror="this.style.display='none'">
+            <h2 style="color:var(--color-primary); margin:0 0 15px 0;">Kisan Pro</h2>
+            <input type="text" id="loginUser" placeholder="Username">
+            <input type="password" id="loginPass" placeholder="Password">
+            <button class="btn" onclick="attemptLogin()">Login</button>
+            <p id="loginError" style="color:red; font-size:12px; display:none; margin-top:10px;">Invalid Credentials</p>
         </div>
     </div>
 
-    <div id="payments" class="tab-content hidden">
-        <div class="card" style="border-left: 5px solid var(--danger);">
-            <h3>⚠️ Pending Dues</h3>
-            <label>Filter by Worker</label>
-            <select id="pendingFilterWorker" onchange="renderPendingDues()"></select>
-            <div id="pendingDuesList" style="margin-top:15px; max-height:300px; overflow-y:auto;"></div>
+    <div id="app" class="hidden">
+        
+        <header class="header">
+            <div class="logo">
+                <img src="assets/img/logo.png" alt="Logo" onerror="this.style.display='none'"> 
+                <h1>Kisan Manager</h1>
+            </div>
+            <nav class="navmenu">
+                <ul>
+                    <li><a id="nav-entry" class="active" onclick="showTab('entry')">Work</a></li>
+                    <li><a id="nav-invest" onclick="showTab('invest')">Buy (Exp)</a></li>
+                    <li><a id="nav-sales" onclick="showTab('sales')">Sell (Inc)</a></li>
+                    <li><a id="nav-payments" onclick="showTab('payments')">Pay</a></li>
+                    <li><a id="nav-report" onclick="showTab('report')">Reports</a></li>
+                    <li><a id="nav-setup" onclick="showTab('setup')">Setup</a></li>
+                    <li><a onclick="logout()" style="color:red;">Exit</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <div class="hero">
+            <div class="hero-content">
+                <h2>Farm Management Dashboard</h2>
+                <p>Track Workers, Expenses, and Crop Sales</p>
+            </div>
         </div>
 
-        <div class="card" style="border-left: 5px solid var(--accent);">
-            <h3>💰 Give Advance</h3>
-            <input type="hidden" id="editAdvId">
-            <label>Date</label><input type="date" id="advDate">
-            <label>Worker</label><select id="selWorkerAdv"></select>
-            <label>Amount (₹)</label><input type="number" id="advAmount">
-            <label>Note</label><input type="text" id="advNote" placeholder="Reason (Optional)">
-            <button class="action-btn btn-orange" onclick="saveAdvance()">SAVE ADVANCE</button>
-            <button class="action-btn btn-red hidden" id="btnCancelAdv" onclick="resetForm()">CANCEL EDIT</button>
+        <div class="container">
+
+            <div id="entry" class="tab-content">
+                <div class="grid-row">
+                    <div class="col-form">
+                        <div class="card">
+                            <h3>📝 Daily Work Entry</h3>
+                            <input type="hidden" id="editWorkId">
+                            <div class="row-inputs">
+                                <div><label>Date</label><input type="date" id="workDate"></div>
+                                <div><label>Worker</label><select id="selWorker" onchange="updateDefaultRate()"></select></div>
+                            </div>
+                            <label>Work Type</label>
+                            <div class="row-inputs">
+                                <select id="selWorkType" onchange="fillWorkType()"><option value="">-- Select --</option></select>
+                                <input type="text" id="manualWorkType" placeholder="Type here...">
+                            </div>
+                            <div class="row-inputs">
+                                <div><label>Rate (₹)</label><input type="number" id="workRate" placeholder="0"></div>
+                                <div><label>Day</label><select id="workStatus"><option value="1">Full Day</option><option value="0.5">Half Day</option></select></div>
+                            </div>
+                            <div class="row-inputs">
+                                <div><label>Farm</label><select id="selFarm"></select></div>
+                                <div><label>Crop</label><select id="selCrop"></select></div>
+                            </div>
+                            <label>Payment</label>
+                            <select id="payStatus"><option value="Pending">🔴 Pending</option><option value="Paid">🟢 Paid Now</option></select>
+
+                            <button class="btn" onclick="saveWork()">SAVE WORK</button>
+                            <button class="btn btn-red hidden" id="btnCancelWork" onclick="resetForm()">CANCEL</button>
+                        </div>
+                    </div>
+                    <div class="col-list">
+                        <div class="card">
+                            <h3>📜 Recent Work</h3>
+                            <div id="quickWorkLog" class="list-container"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="invest" class="tab-content hidden">
+                <div class="grid-row">
+                    <div class="col-form">
+                        <div class="card" style="border-top: 4px solid #e67e22;">
+                            <h3>🛒 Buy / Investment</h3>
+                            <p style="font-size:12px; color:#666;">Fertilizers, Seeds, Nursery Plants</p>
+                            <input type="hidden" id="editInvestId">
+                            
+                            <div class="row-inputs">
+                                <div><label>Date</label><input type="date" id="invDate"></div>
+                                <div><label>For Crop</label><select id="invCrop"></select></div>
+                            </div>
+
+                            <div class="row-inputs">
+                                <div><label>Category</label>
+                                    <select id="invCategory">
+                                        <option value="Fertilizer">Fertilizer</option>
+                                        <option value="Seeds">Seeds</option>
+                                        <option value="Nursery">Nursery Plants</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div><label>Product Name</label><input type="text" id="invItem" placeholder="e.g. Urea"></div>
+                            </div>
+
+                            <div class="row-inputs">
+                                <div><label>Seller / Shop</label><select id="selSellerInv"></select></div>
+                                <div><label>Total Cost (₹)</label><input type="number" id="invAmount" placeholder="0"></div>
+                            </div>
+                            
+                            <label>Notes</label>
+                            <input type="text" id="invNote" placeholder="Quantity or Details">
+
+                            <button class="btn btn-orange" onclick="saveInvest()">SAVE PURCHASE</button>
+                            <button class="btn btn-red hidden" id="btnCancelInvest" onclick="resetForm()">CANCEL</button>
+                        </div>
+                    </div>
+                    <div class="col-list">
+                        <div class="card">
+                            <h3>📉 Purchase History</h3>
+                            <div id="investLog" class="list-container"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="sales" class="tab-content hidden">
+                <div class="grid-row">
+                    <div class="col-form">
+                        <div class="card" style="border-top: 4px solid #3498db;">
+                            <h3>💰 Sell Crops</h3>
+                            <input type="hidden" id="editSaleId">
+                            
+                            <div class="row-inputs">
+                                <div><label>Date</label><input type="date" id="saleDate"></div>
+                                <div><label>Crop / Title</label><select id="selCropSale"></select></div>
+                            </div>
+
+                            <div class="row-inputs">
+                                <div style="flex:2;"><label>Weight/Vol</label><input type="number" id="saleWeight" placeholder="0" oninput="calcSaleTotal()"></div>
+                                <div style="flex:1;"><label>Unit</label>
+                                    <select id="saleUnit">
+                                        <option value="kg">kg</option>
+                                        <option value="quintal">Quintal</option>
+                                        <option value="ton">Ton</option>
+                                        <option value="crates">Crates</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row-inputs">
+                                <div><label>Price/Rate (per Unit)</label><input type="number" id="saleRate" placeholder="₹" oninput="calcSaleTotal()"></div>
+                                <div><label>Total Amount (₹)</label><input type="number" id="saleTotal" placeholder="0" readonly style="background:#f0f0f0; font-weight:bold;"></div>
+                            </div>
+
+                            <div class="row-inputs">
+                                <div><label>Buyer / Trader</label><select id="selBuyerSale"></select></div>
+                            </div>
+
+                            <label>Note</label><input type="text" id="saleNote" placeholder="Details">
+
+                            <button class="btn btn-blue" onclick="saveSale()">SAVE SALE</button>
+                            <button class="btn btn-red hidden" id="btnCancelSale" onclick="resetForm()">CANCEL</button>
+                        </div>
+                    </div>
+                    <div class="col-list">
+                        <div class="card">
+                            <h3>📈 Sales History</h3>
+                            <div id="salesLog" class="list-container"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="payments" class="tab-content hidden">
+                <div class="grid-row">
+                    <div class="col-list">
+                        <div class="card" style="border-top: 4px solid #e74c3c;">
+                            <h3 style="color:#e74c3c">⚠️ Pending Dues</h3>
+                            <label>Filter by Worker:</label>
+                            <select id="pendingFilterWorker" onchange="renderPendingDues()"></select>
+                            <div id="pendingDuesList" class="list-container" style="margin-top:10px;"></div>
+                        </div>
+                    </div>
+                    <div class="col-form">
+                        <div class="card">
+                            <h3>💸 Give Advance</h3>
+                            <input type="hidden" id="editAdvId">
+                            <div class="row-inputs">
+                                <div><label>Date</label><input type="date" id="advDate"></div>
+                                <div><label>Worker</label><select id="selWorkerAdv"></select></div>
+                            </div>
+                            <label>Amount (₹)</label><input type="number" id="advAmount" placeholder="0">
+                            <label>Note</label><input type="text" id="advNote" placeholder="Reason">
+                            <button class="btn" onclick="saveAdvance()">SAVE ADVANCE</button>
+                            <button class="btn btn-red hidden" id="btnCancelAdv" onclick="resetForm()">CANCEL</button>
+                        </div>
+                        <div class="card" style="margin-top:15px;">
+                            <h3>Advance History</h3>
+                            <div id="advHistoryLog" class="list-container" style="max-height:200px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="report" class="tab-content hidden">
+                <div class="card">
+                    <h3>📊 Financial Reports</h3>
+                    
+                    <div style="display:flex; gap:2px; margin-bottom:15px;">
+                        <button class="rpt-tab-btn active" onclick="showReport('rptWorker')">👷 Workers</button>
+                        <button class="rpt-tab-btn" onclick="showReport('rptInvest')">🛒 Purchases</button>
+                        <button class="rpt-tab-btn" onclick="showReport('rptSales')">💰 Sales</button>
+                    </div>
+
+                    <div class="row-inputs" style="background:#f9f9f9; padding:10px; border-radius:5px; margin-bottom:15px;">
+                        <div><label>Start Date</label><input type="date" id="rptStart" onchange="renderAllReports()"></div>
+                        <div><label>End Date</label><input type="date" id="rptEnd" onchange="renderAllReports()"></div>
+                    </div>
+                    
+                    <div class="row-inputs" style="background:#f9f9f9; padding:10px; border-radius:5px; margin-bottom:15px; margin-top: -10px;">
+                        <div style="flex:1;" id="rptVendorContainer">
+                            <label>Filter by Vendor (Buy/Sell)</label>
+                            <select id="rptVendor" onchange="renderAllReports()"><option value="">All Vendors</option></select>
+                        </div>
+                        <div style="flex:1;">
+                            <label>Filter by Crop</label>
+                            <select id="rptCrop" onchange="renderAllReports()"><option value="">All Crops</option></select>
+                        </div>
+                    </div>
+
+                    <div id="rptWorker" class="rpt-section">
+                        <h4>Worker Payment Summary</h4>
+                        <div id="workerReportTable" style="margin-top:10px;"></div>
+                        <button class="btn btn-blue" style="width:auto; margin-top:10px;" onclick="exportCSV('worker')">📥 Worker CSV</button>
+                    </div>
+
+                    <div id="rptInvest" class="rpt-section hidden">
+                        <h4>Purchase / Investment Summary</h4>
+                        <div id="investReportTable" style="margin-top:10px;"></div>
+                        <button class="btn btn-orange" style="width:auto; margin-top:10px;" onclick="exportCSV('invest')">📥 Purchase CSV</button>
+                    </div>
+
+                    <div id="rptSales" class="rpt-section hidden">
+                        <h4>Sales Summary</h4>
+                        <div id="salesReportTable" style="margin-top:10px;"></div>
+                        <button class="btn btn-blue" style="width:auto; margin-top:10px;" onclick="exportCSV('sales')">📥 Sales CSV</button>
+                    </div>
+
+                </div>
+            </div>
+
+            <div id="setup" class="tab-content hidden">
+                <div class="grid-row">
+                    <div class="col-list">
+                        <div class="card">
+                            <h3>⚙️ Master Data</h3>
+                            <div class="row-inputs">
+                                <input type="text" id="masterInput" placeholder="Name">
+                                <button class="btn btn-mini" style="width:auto; height:34px;" onclick="addItem('crops')">+ Add</button>
+                            </div>
+                            <div style="display:flex; gap:5px; flex-wrap:wrap; margin-bottom:15px;">
+                                <button class="btn-mini btn-blue" onclick="addItem('workers')">+ Worker</button>
+                                <button class="btn-mini btn-blue" onclick="addItem('farms')">+ Farm</button>
+                                <button class="btn-mini btn-blue" onclick="addItem('crops')">+ Crop</button>
+                                <button class="btn-mini btn-blue" onclick="addItem('workTypes')">+ WorkType</button>
+                                <button class="btn-mini btn-orange" onclick="addItem('sellers')">+ Seller</button>
+                                <button class="btn-mini btn-blue" onclick="addItem('buyers')">+ Buyer</button>
+                            </div>
+                            <div id="masterListDisplay"></div>
+                        </div>
+                    </div>
+                    <div class="col-form">
+                        <div class="card">
+                            <h3>👤 Users & Cloud</h3>
+                            <div style="background:#f9f9f9; padding:10px;">
+                                <input type="text" id="newUsername" placeholder="New User">
+                                <input type="text" id="newPassword" placeholder="New Pass">
+                                <button class="btn btn-mini btn-blue" onclick="addUser()">Add User</button>
+                            </div>
+                            <div id="userListDisplay" style="margin-top:10px;"></div>
+                            
+                            <h4 style="margin-top:20px;">Backup</h4>
+                            <input type="text" id="cloudUrl" placeholder="Script URL">
+                            <button class="btn btn-mini" onclick="saveCloudUrl()">Save URL</button>
+                            
+                            <div style="margin-top:10px;">
+                                <button class="btn btn-blue" onclick="uploadData()">⬆️ Upload</button>
+                                <button class="btn btn-blue" style="margin-top:5px;" onclick="downloadData()">⬇️ Download</button>
+                            </div>
+                            
+                            <div id="progressBarContainer" class="progress-container hidden">
+                                <div id="progressBar" class="progress-bar"></div>
+                            </div>
+                            <p id="syncStatus" style="font-size:11px; text-align:center; margin-top:8px; color:#666;">Ready</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
-        <div class="card">
-            <h3>📅 Advance History</h3>
-            <div id="advHistoryLog"></div>
+        <div class="bottom-tabs">
+            <div class="tab-icon" onclick="showTab('entry')">📝</div>
+            <div class="tab-icon" onclick="showTab('invest')">🛒</div>
+            <div class="tab-icon" onclick="showTab('sales')">💰</div>
+            <div class="tab-icon" onclick="showTab('payments')">₹</div>
+            <div class="tab-icon" onclick="showTab('report')">📊</div>
         </div>
     </div>
-
-    <div id="report" class="tab-content hidden">
-        <div class="card">
-            <h3>📊 Financial Report</h3>
-            <div class="input-group">
-                <input type="date" id="rptStart" onchange="renderReports()">
-                <input type="date" id="rptEnd" onchange="renderReports()">
-            </div>
-            <label>Filter by Crop</label>
-            <select id="rptCrop" onchange="renderReports()"></select>
-            
-            <div id="reportSummary" style="margin-top:20px;"></div>
-            <button class="action-btn btn-blue" onclick="exportCSV()">📥 Download Excel</button>
-        </div>
-    </div>
-
-    <div id="setup" class="tab-content hidden">
-        <div class="card">
-            <h3>☁️ Cloud Backup</h3>
-            <p style="font-size:12px; color:#666; margin-bottom:10px;">Connect to Google Drive Script</p>
-            <input type="text" id="cloudUrl" placeholder="Paste Google Script Web App URL">
-            <button class="action-btn btn-small" style="margin-top:5px; width:auto;" onclick="saveCloudUrl()">Save URL</button>
-            
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:20px;">
-                <button class="action-btn btn-blue" style="margin-top:0;" onclick="uploadData()">
-                    ⬆️ Upload
-                </button>
-                <button class="action-btn btn-blue" style="margin-top:0;" onclick="downloadData()">
-                    ⬇️ Download
-                </button>
-            </div>
-            <p id="syncStatus" class="sync-box" style="margin-top:15px;">Status: Ready</p>
-        </div>
-
-        <div class="card">
-            <h3>⚙️ Master Data</h3>
-            <div class="input-group">
-                <input type="text" id="masterInput" placeholder="Add Item Name..." style="margin-bottom:0;">
-                <button class="btn-small btn-green" style="width:50px; border-radius:8px;" onclick="addItem('workers')">+</button>
-            </div>
-            <div style="display:flex; flex-wrap:wrap; gap:5px; margin-bottom:15px;">
-                <button class="btn-small btn-blue" onclick="addItem('workers')">+ Worker</button>
-                <button class="btn-small btn-blue" onclick="addItem('farms')">+ Farm</button>
-                <button class="btn-small btn-blue" onclick="addItem('crops')">+ Crop</button>
-                <button class="btn-small btn-blue" onclick="addItem('workTypes')">+ Work Type</button>
-            </div>
-            <div id="masterListDisplay"></div>
-        </div>
-    </div>
-
-</div>
-
-<div class="tabs">
-    <button id="btn-entry" class="tab-btn active" onclick="showTab('entry')">
-        <span>📝</span>Work
-    </button>
-    <button id="btn-payments" class="tab-btn" onclick="showTab('payments')">
-        <span>₹</span>Pay
-    </button>
-    <button id="btn-report" class="tab-btn" onclick="showTab('report')">
-        <span>📊</span>Report
-    </button>
-    <button id="btn-setup" class="tab-btn" onclick="showTab('setup')">
-        <span>⚙️</span>Setup
-    </button>
-</div>
 
 <script>
-    // --- DATABASE INIT ---
-    let db = { workers: [], farms: [], crops: [], workTypes: ['Weeding', 'Harvesting', 'Sowing', 'Spray'], entries: [], advances: [] };
+    // --- DB INIT ---
+    let db = { 
+        workers: [], farms: [], crops: [], workTypes: ['Weeding', 'Harvesting'], 
+        sellers: [], buyers: [],
+        entries: [], advances: [], 
+        investments: [], sales: [], 
+        users: [{name:'admin', pass:'1234'}] 
+    };
 
-    try {
-        const saved = localStorage.getItem('kisanDB');
-        if(saved) {
-            const parsed = JSON.parse(saved);
-            db = { ...db, ...parsed };
-            if(!db.workTypes) db.workTypes = ['Weeding', 'Harvesting', 'Sowing', 'Spray'];
-        }
-    } catch(e) { console.log("DB Init Error"); }
+    try { const s = localStorage.getItem('kisanDB'); if(s) db = { ...db, ...JSON.parse(s) }; } catch(e) {}
+    if(!db.investments) db.investments = [];
+    if(!db.sales) db.sales = [];
+    if(!db.sellers) db.sellers = []; 
+    if(!db.buyers) db.buyers = [];   
 
-    function saveDB() {
-        localStorage.setItem('kisanDB', JSON.stringify(db));
+    function saveDB() { localStorage.setItem('kisanDB', JSON.stringify(db)); }
+
+    // --- AUTH ---
+    function attemptLogin() {
+        const u = document.getElementById('loginUser').value.trim();
+        const p = document.getElementById('loginPass').value.trim();
+        if(db.users.find(x => x.name === u && x.pass === p)) {
+            document.getElementById('login-overlay').classList.add('hidden');
+            document.getElementById('app').classList.remove('hidden');
+            sessionStorage.setItem('kLoggedIn', 'true');
+        } else { document.getElementById('loginError').style.display='block'; }
     }
+    function logout() { sessionStorage.removeItem('kLoggedIn'); location.reload(); }
 
-    // --- TABS ---
     function showTab(id) {
         document.querySelectorAll('.tab-content').forEach(d => d.classList.add('hidden'));
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.getElementById(id).classList.remove('hidden');
-        document.getElementById('btn-' + id).classList.add('active');
-        
-        refreshUI();
-        if(id === 'report') renderReports();
-        if(id === 'payments') renderPendingDues();
+        document.querySelectorAll('.navmenu a').forEach(a => a.classList.remove('active'));
+        const nav = document.getElementById('nav-'+id);
+        if(nav) nav.classList.add('active');
+        refreshUI(); window.scrollTo(0,0);
     }
 
-    // --- SETTINGS ---
-    function addItem(type) {
-        const val = document.getElementById('masterInput').value.trim();
-        if(!val) return alert("Enter a name!");
-        if(type === 'workers') db.workers.push({name: val, rate: 0});
-        else db[type].push(val);
-        document.getElementById('masterInput').value = "";
-        saveDB(); refreshUI(); alert("Added!");
-    }
-
-    function deleteMaster(type, index) {
-        if(confirm("Delete this item?")) {
-            db[type].splice(index, 1);
-            saveDB(); refreshUI();
-        }
-    }
-
-    // --- WORK ENTRY LOGIC ---
-    function fillWorkType() {
-        const select = document.getElementById('selWorkType');
-        const input = document.getElementById('manualWorkType');
-        if(select.value) input.value = select.value;
-    }
-
+    // --- 1. WORK ENTRY ---
     function saveWork() {
         const id = document.getElementById('editWorkId').value;
-        const workType = document.getElementById('manualWorkType').value;
-        const isPaid = document.getElementById('payStatus').value === 'Paid';
-
         const entry = {
             id: id ? parseInt(id) : Date.now(),
             date: document.getElementById('workDate').value,
             worker: document.getElementById('selWorker').value,
-            rate: parseFloat(document.getElementById('workRate').value) || 0,
+            rate: parseFloat(document.getElementById('workRate').value)||0,
             farm: document.getElementById('selFarm').value,
             crop: document.getElementById('selCrop').value,
-            type: workType || "General",
+            type: document.getElementById('manualWorkType').value || document.getElementById('selWorkType').value || "General",
             status: parseFloat(document.getElementById('workStatus').value),
-            isPaid: isPaid
+            isPaid: document.getElementById('payStatus').value === 'Paid'
         };
-
-        if(!entry.date || !entry.worker) return alert("Missing Date or Worker");
-
-        if(id) {
-            const idx = db.entries.findIndex(e => e.id == id);
-            if(idx > -1) db.entries[idx] = entry;
-        } else {
-            db.entries.push(entry);
-        }
-        
-        saveDB(); resetForm(); refreshUI(); 
-        alert("✅ Work Saved Successfully!");
+        if(!entry.date || !entry.worker) return alert("Select Date & Worker");
+        if(id) { const idx = db.entries.findIndex(e=>e.id==id); if(idx>-1) db.entries[idx]=entry; } 
+        else { db.entries.push(entry); }
+        saveDB(); resetForm(); refreshUI();
     }
-
+    function deleteWork(id) { if(confirm("Delete?")) { db.entries=db.entries.filter(e=>e.id!==id); saveDB(); refreshUI(); } }
     function editWork(id) {
-        const e = db.entries.find(x => x.id == id);
-        if(!e) return;
-        showTab('entry');
-        document.getElementById('editWorkId').value = e.id;
-        document.getElementById('workDate').value = e.date;
-        document.getElementById('selWorker').value = e.worker;
-        document.getElementById('workRate').value = e.rate;
-        document.getElementById('selFarm').value = e.farm;
-        document.getElementById('selCrop').value = e.crop;
-        document.getElementById('manualWorkType').value = e.type || "";
-        document.getElementById('payStatus').value = e.isPaid ? "Paid" : "Pending";
+        const e=db.entries.find(x=>x.id==id); if(!e)return;
+        showTab('entry'); document.getElementById('editWorkId').value=e.id;
+        document.getElementById('workDate').value=e.date; document.getElementById('selWorker').value=e.worker;
+        document.getElementById('workRate').value=e.rate; document.getElementById('selFarm').value=e.farm;
+        document.getElementById('selCrop').value=e.crop; document.getElementById('manualWorkType').value=e.type;
+        document.getElementById('workStatus').value=e.status; document.getElementById('payStatus').value=e.isPaid?'Paid':'Pending';
         document.getElementById('btnCancelWork').classList.remove('hidden');
     }
 
-    function deleteWork(id) {
-        if(confirm("Delete this entry?")) {
-            db.entries = db.entries.filter(e => e.id !== id);
-            saveDB(); refreshUI();
-        }
-    }
-
-    // --- PAYMENTS & DUES LOGIC ---
-    function renderPendingDues() {
-        const filterW = document.getElementById('pendingFilterWorker').value;
-        const listDiv = document.getElementById('pendingDuesList');
+    // --- 2. INVESTMENT (BUY) LOGIC ---
+    function saveInvest() {
+        const id = document.getElementById('editInvestId').value;
+        const inv = {
+            id: id ? parseInt(id) : Date.now(),
+            date: document.getElementById('invDate').value,
+            crop: document.getElementById('invCrop').value,
+            category: document.getElementById('invCategory').value,
+            item: document.getElementById('invItem').value,
+            vendor: document.getElementById('selSellerInv').value, 
+            amount: parseFloat(document.getElementById('invAmount').value) || 0,
+            note: document.getElementById('invNote').value
+        };
+        if(!inv.date || !inv.item) return alert("Missing Date or Item Name");
         
-        let html = ``;
+        if(id) { const idx = db.investments.findIndex(x=>x.id==id); if(idx>-1) db.investments[idx]=inv; }
+        else { db.investments.push(inv); }
+        saveDB(); resetForm(); refreshUI();
+    }
+    function deleteInvest(id) { if(confirm("Delete?")) { db.investments=db.investments.filter(x=>x.id!==id); saveDB(); refreshUI(); } }
+    function editInvest(id) {
+        const e=db.investments.find(x=>x.id==id); if(!e)return;
+        showTab('invest'); document.getElementById('editInvestId').value=e.id;
+        document.getElementById('invDate').value=e.date; document.getElementById('invCategory').value=e.category;
+        document.getElementById('invCrop').value=e.crop;
+        document.getElementById('invItem').value=e.item; document.getElementById('selSellerInv').value=e.vendor;
+        document.getElementById('invAmount').value=e.amount; document.getElementById('invNote').value=e.note;
+        document.getElementById('btnCancelInvest').classList.remove('hidden');
+    }
+
+    // --- 3. SALES (SELL) LOGIC ---
+    function calcSaleTotal() {
+        const w = parseFloat(document.getElementById('saleWeight').value) || 0;
+        const r = parseFloat(document.getElementById('saleRate').value) || 0;
+        document.getElementById('saleTotal').value = (w * r).toFixed(2);
+    }
+    function saveSale() {
+        const id = document.getElementById('editSaleId').value;
+        const sale = {
+            id: id ? parseInt(id) : Date.now(),
+            date: document.getElementById('saleDate').value,
+            crop: document.getElementById('selCropSale').value,
+            weight: parseFloat(document.getElementById('saleWeight').value)||0,
+            unit: document.getElementById('saleUnit').value,
+            rate: parseFloat(document.getElementById('saleRate').value)||0,
+            total: parseFloat(document.getElementById('saleTotal').value)||0,
+            vendor: document.getElementById('selBuyerSale').value, 
+            note: document.getElementById('saleNote').value
+        };
+        if(!sale.date || !sale.crop) return alert("Missing Date or Crop");
         
-        let pendingCount = 0;
-        db.entries.slice().reverse().forEach(e => {
-            if(!e.isPaid) {
-                if(filterW && e.worker !== filterW) return;
-                const amt = e.rate * e.status;
-                html += `<div class="log-item">
-                    <div>
-                        <div style="font-weight:bold;">${e.worker}</div>
-                        <div style="font-size:12px; color:#666;">${e.date} • ${e.type}</div>
-                    </div>
-                    <div style="text-align:right;">
-                        <div style="color:var(--danger); font-weight:bold;">₹${amt}</div>
-                        <button class="btn-small btn-blue" style="margin-top:5px;" onclick="markAsPaid(${e.id})">Mark Paid</button>
-                    </div>
-                </div>`;
-                pendingCount++;
-            }
-        });
-
-        if(pendingCount === 0) html = "<div style='padding:20px; text-align:center; color:#888;'>✅ No pending dues.</div>";
-        listDiv.innerHTML = html;
+        if(id) { const idx = db.sales.findIndex(x=>x.id==id); if(idx>-1) db.sales[idx]=sale; }
+        else { db.sales.push(sale); }
+        saveDB(); resetForm(); refreshUI();
+    }
+    function deleteSale(id) { if(confirm("Delete?")) { db.sales=db.sales.filter(x=>x.id!==id); saveDB(); refreshUI(); } }
+    function editSale(id) {
+        const e=db.sales.find(x=>x.id==id); if(!e)return;
+        showTab('sales'); document.getElementById('editSaleId').value=e.id;
+        document.getElementById('saleDate').value=e.date; document.getElementById('selCropSale').value=e.crop;
+        document.getElementById('saleWeight').value=e.weight; document.getElementById('saleUnit').value=e.unit || 'kg';
+        document.getElementById('saleRate').value=e.rate; document.getElementById('saleTotal').value=e.total; 
+        document.getElementById('selBuyerSale').value=e.vendor; document.getElementById('saleNote').value=e.note;
+        document.getElementById('btnCancelSale').classList.remove('hidden');
     }
 
-    function markAsPaid(id) {
-        if(confirm("Mark this work as PAID?")) {
-            const idx = db.entries.findIndex(e => e.id == id);
-            if(idx > -1) {
-                db.entries[idx].isPaid = true;
-                saveDB();
-                renderPendingDues();
-                refreshUI();
-            }
-        }
-    }
-
+    // --- 4. ADVANCES ---
     function saveAdvance() {
         const id = document.getElementById('editAdvId').value;
         const adv = {
             id: id ? parseInt(id) : Date.now(),
             date: document.getElementById('advDate').value,
             worker: document.getElementById('selWorkerAdv').value,
-            amount: parseFloat(document.getElementById('advAmount').value) || 0,
+            amount: parseFloat(document.getElementById('advAmount').value)||0,
             note: document.getElementById('advNote').value
         };
-
-        if(!adv.date || !adv.worker || !adv.amount) return alert("Missing Data");
-
-        if(id) {
-            const idx = db.advances.findIndex(a => a.id == id);
-            if(idx > -1) db.advances[idx] = adv;
-        } else {
-            db.advances.push(adv);
-        }
-
-        saveDB(); resetForm(); refreshUI(); 
-        alert("✅ Advance Saved!");
+        if(!adv.date || !adv.worker) return alert("Missing Info");
+        if(id) { const idx = db.advances.findIndex(a=>a.id==id); if(idx>-1) db.advances[idx]=adv; } 
+        else { db.advances.push(adv); }
+        saveDB(); resetForm(); refreshUI();
     }
-
+    function deleteAdv(id) { if(confirm("Delete?")) { db.advances=db.advances.filter(a=>a.id!==id); saveDB(); refreshUI(); } }
     function editAdv(id) {
-        const a = db.advances.find(x => x.id == id);
-        if(!a) return;
-        showTab('payments');
-        document.getElementById('editAdvId').value = a.id;
-        document.getElementById('advDate').value = a.date;
-        document.getElementById('selWorkerAdv').value = a.worker;
-        document.getElementById('advAmount').value = a.amount;
-        document.getElementById('advNote').value = a.note;
+        const a=db.advances.find(x=>x.id==id); if(!a)return;
+        showTab('payments'); document.getElementById('editAdvId').value=a.id;
+        document.getElementById('advDate').value=a.date; document.getElementById('selWorkerAdv').value=a.worker;
+        document.getElementById('advAmount').value=a.amount; document.getElementById('advNote').value=a.note;
         document.getElementById('btnCancelAdv').classList.remove('hidden');
     }
 
-    function deleteAdv(id) {
-        if(confirm("Delete this advance?")) {
-            db.advances = db.advances.filter(a => a.id !== id);
-            saveDB(); refreshUI();
-        }
-    }
-
-    // --- REPORTS ---
-    function renderReports() {
-        const start = document.getElementById('rptStart').value;
-        const end = document.getElementById('rptEnd').value;
-        const cropFilter = document.getElementById('rptCrop').value;
-
-        let html = `<table><tr><th>Worker</th><th>Pend</th><th>Adv</th><th>Net</th></tr>`;
-        
-        db.workers.forEach(w => {
-            const pendingWorkAmt = db.entries
-                .filter(e => e.worker === w.name && !e.isPaid)
-                .filter(e => (!start || e.date >= start) && (!end || e.date <= end))
-                .filter(e => (cropFilter === 'All' || e.crop === cropFilter))
-                .reduce((sum, e) => sum + (e.rate * e.status), 0);
-
-            const advancesAmt = db.advances
-                .filter(a => a.worker === w.name)
-                .filter(a => (!start || a.date >= start) && (!end || a.date <= end))
-                .reduce((sum, a) => sum + a.amount, 0);
-
-            const balance = pendingWorkAmt - advancesAmt;
-
-            html += `<tr>
-                <td style="font-weight:bold;">${w.name}</td>
-                <td>${pendingWorkAmt}</td>
-                <td>${advancesAmt}</td>
-                <td style="color:${balance < 0 ? 'var(--danger)' : 'var(--primary)'}; font-weight:bold;">₹${balance}</td>
-            </tr>`;
-        });
-        document.getElementById('reportSummary').innerHTML = html + `</table>`;
-    }
-
-    function exportCSV() {
-        let csv = "Date,Worker,Type,Amount,Status,Note\n";
-        db.entries.forEach(e => csv += `${e.date},${e.worker},${e.type || 'Work'},${e.rate*e.status},${e.isPaid ? 'Paid' : 'Pending'},-\n`);
-        db.advances.forEach(a => csv += `${a.date},${a.worker},Advance,${a.amount},-,${a.note}\n`);
-        
-        const blob = new Blob([csv], { type: 'text/csv' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = "Kisan_Report.csv";
-        link.click();
-    }
-
-    // --- CLOUD SYNC FUNCTIONS (UPDATED) ---
-    function saveCloudUrl() {
-        localStorage.setItem('kisanCloudUrl', document.getElementById('cloudUrl').value);
-        alert("URL Saved!");
-    }
-
-    async function uploadData() {
-        const url = localStorage.getItem('kisanCloudUrl');
-        if(!url) return alert("No Cloud URL Saved");
-        
-        document.getElementById('syncStatus').innerText = "📤 Uploading...";
-        try {
-            await fetch(url, { method: 'POST', body: JSON.stringify(db) });
-            document.getElementById('syncStatus').innerText = "✅ Upload Success";
-            alert("Data Uploaded to Cloud!");
-        } catch(e) {
-            console.error(e);
-            document.getElementById('syncStatus').innerText = "❌ Upload Failed";
-            alert("Upload Failed. Check Internet.");
-        }
-    }
-
-    async function downloadData() {
-        const url = localStorage.getItem('kisanCloudUrl');
-        if(!url) return alert("No Cloud URL Saved");
-        
-        document.getElementById('syncStatus').innerText = "📥 Downloading...";
-        try {
-            const response = await fetch(url);
-            if (!response.ok) throw new Error("Server Error");
-            const cloudData = await response.json();
-            
-            if(cloudData) {
-                if(confirm("Replace current data with Cloud data?")) {
-                    db = cloudData;
-                    saveDB();
-                    refreshUI();
-                    renderPendingDues();
-                    document.getElementById('syncStatus').innerText = "✅ Download Success";
-                    alert("Data Downloaded & Updated!");
-                }
+    // --- PAYMENTS FILTER ---
+    function renderPendingDues() {
+        const filterW = document.getElementById('pendingFilterWorker').value;
+        let html = ""; let count = 0;
+        db.entries.slice().reverse().forEach(e => {
+            if(!e.isPaid && (filterW === "" || e.worker === filterW)) {
+                html += `<div class="log-item">
+                    <div><b>${e.worker}</b><br><span style="color:#888">${e.date}</span></div>
+                    <div style="text-align:right"><b style="color:red">₹${e.rate*e.status}</b><br>
+                    <button class="btn-mini btn-blue" onclick="markPaid(${e.id})">Mark Paid</button></div>
+                </div>`;
+                count++;
             }
-        } catch(e) {
-            console.error(e);
-            document.getElementById('syncStatus').innerText = "❌ Download Failed";
-            alert("Download Failed. Ensure Script Permissions are set to 'Anyone'.");
-        }
+        });
+        document.getElementById('pendingDuesList').innerHTML = count ? html : "<p style='text-align:center;color:#ccc'>No dues.</p>";
+    }
+    function markPaid(id) {
+        const idx=db.entries.findIndex(e=>e.id==id);
+        if(idx>-1) { db.entries[idx].isPaid=true; saveDB(); renderPendingDues(); refreshUI(); }
     }
 
-    // --- UI HELPERS ---
+    // --- MASTERS ---
+    function addItem(type) {
+        const val = document.getElementById('masterInput').value.trim();
+        if(!val) return alert("Empty");
+        if(type==='workers') db.workers.push({name:val, rate:0});
+        else db[type].push(val);
+        document.getElementById('masterInput').value=""; saveDB(); refreshUI();
+    }
+    function deleteMaster(type,i) { if(confirm("Remove?")) { db[type].splice(i,1); saveDB(); refreshUI(); } }
+    function addUser() { const u=document.getElementById('newUsername').value; const p=document.getElementById('newPassword').value; if(u&&p) { db.users.push({name:u, pass:p}); saveDB(); refreshUI(); document.getElementById('newUsername').value=""; } }
+
+    function resetForm() {
+        document.querySelectorAll('input').forEach(i => { if(i.type!=='date' && i.id!=='cloudUrl') i.value=""; });
+        ['selWorkType','selFarm','selCrop','selSellerInv','selBuyerSale','selCropSale','invCrop'].forEach(id => {
+            if(document.getElementById(id)) document.getElementById(id).value="";
+        });
+        document.getElementById('payStatus').value="Pending";
+        document.querySelectorAll('.btn-red').forEach(b => b.classList.add('hidden'));
+        document.getElementById('editWorkId').value=""; document.getElementById('editAdvId').value="";
+        document.getElementById('editInvestId').value=""; document.getElementById('editSaleId').value="";
+    }
+    function fillWorkType() { document.getElementById('manualWorkType').value = document.getElementById('selWorkType').value; }
+
     function refreshUI() {
         const fill = (id, list, isObj) => {
-            const el = document.getElementById(id);
-            if(!el) return;
-            const old = el.value;
-            el.innerHTML = '<option value="">-- Select --</option>';
-            list.forEach(i => {
-                const val = isObj ? i.name : i;
-                el.innerHTML += `<option value="${val}">${val}</option>`;
-            });
+            const el = document.getElementById(id); if(!el) return;
+            const old = el.value; el.innerHTML = '<option value="">-- Select --</option>';
+            list.forEach(i => { const val = isObj ? i.name : i; el.innerHTML += `<option value="${val}">${val}</option>`; });
             if(old) el.value = old;
         };
+        fill('selWorker', db.workers, true); fill('selWorkerAdv', db.workers, true); fill('pendingFilterWorker', db.workers, true);
+        fill('selFarm', db.farms, false); fill('selCrop', db.crops, false); fill('selWorkType', db.workTypes, false); 
+        fill('rptCrop', db.crops, false); fill('invCrop', db.crops, false);
+        fill('selSellerInv', db.sellers, false); 
+        fill('selBuyerSale', db.buyers, false);  
+        fill('selCropSale', db.crops, false);
 
-        fill('selWorker', db.workers, true);
-        fill('selWorkerAdv', db.workers, true);
-        fill('pendingFilterWorker', db.workers, true);
-        fill('selFarm', db.farms, false);
-        fill('selCrop', db.crops, false);
-        fill('selWorkType', db.workTypes, false); 
-        
-        const rptCrop = document.getElementById('rptCrop');
-        rptCrop.innerHTML = '<option value="All">All Crops</option>';
-        db.crops.forEach(c => rptCrop.innerHTML += `<option value="${c}">${c}</option>`);
+        // Fill Vendor Report Filter
+        const allVendors = [...new Set([...db.sellers, ...db.buyers])];
+        fill('rptVendor', allVendors, false);
 
         window.updateDefaultRate = () => {
             const w = db.workers.find(x => x.name === document.getElementById('selWorker').value);
             if(w) document.getElementById('workRate').value = w.rate;
+        }
+
+        const renderLogList = (data, elemId, fnEdit, fnDel, fmtMain, fmtRight) => {
+            let h = "";
+            data.slice().reverse().slice(0,20).forEach(x => {
+                h += `<div class="log-item"><div>${fmtMain(x)}</div><div style="text-align:right">${fmtRight(x)}<br>
+                <button class="btn-mini btn-blue" onclick="${fnEdit}(${x.id})">Edit</button>
+                <button class="btn-mini btn-red" onclick="${fnDel}(${x.id})">X</button></div></div>`;
+            });
+            document.getElementById(elemId).innerHTML = h;
         };
 
-        // Render Logs with Modern Look
-        let wHtml = ``;
-        db.entries.slice().reverse().slice(0,10).forEach(e => {
-            const sts = e.isPaid ? '<span class="status-paid">Paid</span>' : '<span class="status-pending">Pend</span>';
-            wHtml += `<div class="log-item">
-                <div>
-                    <div style="font-weight:600;">${e.worker}</div>
-                    <div style="font-size:12px; color:#666;">${e.date} • ${e.type}</div>
-                </div>
-                <div style="text-align:right;">
-                    ${sts}
-                    <div style="margin-top:5px;">
-                        <button class="btn-small btn-blue" onclick="editWork(${e.id})">✏️</button>
-                        <button class="btn-small btn-red" onclick="deleteWork(${e.id})">✕</button>
-                    </div>
-                </div>
-            </div>`;
-        });
-        document.getElementById('quickWorkLog').innerHTML = wHtml;
+        renderLogList(db.entries, 'quickWorkLog', 'editWork', 'deleteWork', 
+            e => `<b>${e.worker}</b><br><span style="color:#888">${e.date}</span>`, 
+            e => `<span style="color:${e.isPaid?'green':'red'}">${e.isPaid?'Paid':'Pend'}</span>`);
+            
+        renderLogList(db.investments, 'investLog', 'editInvest', 'deleteInvest', 
+            i => `<b>${i.item}</b><br><span style="color:#888">${i.date} • ${i.crop || '-'}</span>`,
+            i => `<b style="color:#e67e22">₹${i.amount}</b>`);
 
-        let aHtml = ``;
-        db.advances.slice().reverse().forEach(a => {
-            aHtml += `<div class="log-item">
-                <div>
-                    <div style="font-weight:600;">${a.worker}</div>
-                    <div style="font-size:12px; color:#666;">${a.date}</div>
-                </div>
-                <div style="text-align:right;">
-                    <div style="font-weight:bold; color:var(--blue);">₹${a.amount}</div>
-                    <div style="margin-top:5px;">
-                        <button class="btn-small btn-blue" onclick="editAdv(${a.id})">✏️</button>
-                        <button class="btn-small btn-red" onclick="deleteAdv(${a.id})">✕</button>
-                    </div>
-                </div>
-            </div>`;
-        });
-        document.getElementById('advHistoryLog').innerHTML = aHtml;
+        renderLogList(db.sales, 'salesLog', 'editSale', 'deleteSale',
+            s => `<b>${s.crop}</b><br><span style="color:#888">${s.date}</span>`,
+            s => `<b style="color:#3498db">₹${s.total}</b>`);
 
-        let mHtml = "";
-        ['workers', 'farms', 'crops', 'workTypes'].forEach(k => {
-            mHtml += `<div style="background:var(--primary-light); color:var(--primary-dark); padding:6px 10px; font-weight:bold; margin-top:15px; border-radius:6px; font-size:12px;">${k.toUpperCase()}</div>`;
-            db[k].forEach((item, i) => {
-                const name = typeof item === 'object' ? item.name : item;
-                mHtml += `<div class="log-item" style="padding:8px 0;">
-                    <span>${name}</span> 
-                    <button class="btn-small btn-red" onclick="deleteMaster('${k}',${i})">✕</button>
-                </div>`;
+        renderLogList(db.advances, 'advHistoryLog', 'editAdv', 'deleteAdv',
+            a => `<b>${a.worker}</b><br><span style="color:#888">${a.date}</span>`,
+            a => `<b style="color:blue">₹${a.amount}</b>`);
+
+        renderPendingDues();
+
+        let mhtml = "";
+        ['workers','farms','crops','sellers','buyers','workTypes'].forEach(k => {
+            mhtml += `<div class="master-header">${k}</div>`;
+            db[k].forEach((v,i) => {
+                const n = typeof v === 'object' ? v.name : v;
+                mhtml += `<div class="log-item" style="padding:5px 0;">${n} <button class="btn-mini btn-red" onclick="deleteMaster('${k}',${i})">X</button></div>`;
             });
         });
-        document.getElementById('masterListDisplay').innerHTML = mHtml;
+        document.getElementById('masterListDisplay').innerHTML = mhtml;
+        
+        let uhtml = "";
+        db.users.forEach((u,i) => { uhtml += `<div class="log-item">👤 ${u.name}</div>`; });
+        document.getElementById('userListDisplay').innerHTML = uhtml;
     }
 
-    function resetForm() {
-        document.getElementById('editWorkId').value = "";
-        document.getElementById('editAdvId').value = "";
-        document.getElementById('btnCancelWork').classList.add('hidden');
-        document.getElementById('btnCancelAdv').classList.add('hidden');
-        document.getElementById('payStatus').value = "Pending";
-        document.querySelectorAll('input').forEach(i => {
-            if(i.type !== 'date' && i.id !== 'cloudUrl') i.value = "";
+    // --- REPORTS ---
+    function showReport(id) {
+        document.querySelectorAll('.rpt-section').forEach(d => d.classList.add('hidden'));
+        document.getElementById(id).classList.remove('hidden');
+        document.querySelectorAll('.rpt-tab-btn').forEach(b => b.classList.remove('active'));
+        event.target.classList.add('active');
+
+        // Logic: HIDE vendor filter if Worker Tab selected
+        const vContainer = document.getElementById('rptVendorContainer');
+        if(id === 'rptWorker') {
+            vContainer.classList.add('hidden');
+            document.getElementById('rptVendor').value = ""; // Reset
+        } else {
+            vContainer.classList.remove('hidden');
+        }
+
+        renderAllReports();
+    }
+
+    function renderAllReports() {
+        const start = document.getElementById('rptStart').value;
+        const end = document.getElementById('rptEnd').value;
+        const cropFilter = document.getElementById('rptCrop').value;
+        const vendorFilter = document.getElementById('rptVendor').value;
+        
+        // 1. Worker Report
+        let wHtml = "<table class='report-table'><tr><th>Worker</th><th>Pend</th><th>Adv</th><th>Net</th></tr>";
+        db.workers.forEach(w => {
+            let p = 0; let a = 0;
+            db.entries.forEach(e => { if(e.worker===w.name && !e.isPaid && (!start || e.date>=start) && (!end || e.date<=end) && (!cropFilter || e.crop===cropFilter)) p += (e.rate*e.status); });
+            db.advances.forEach(ad => { if(ad.worker===w.name && (!start || ad.date>=start) && (!end || ad.date<=end)) a += ad.amount; });
+            wHtml += `<tr><td>${w.name}</td><td>${p}</td><td>${a}</td><td style="color:${(p-a)<0?'red':'green'}">${p-a}</td></tr>`;
         });
+        document.getElementById('workerReportTable').innerHTML = wHtml + "</table>";
+
+        // 2. Invest Report
+        let iTotal = 0;
+        let iHtml = "<table class='report-table'><tr><th>Date</th><th>Item</th><th>Crop</th><th>Seller</th><th>Amt</th></tr>";
+        db.investments.forEach(i => {
+            if((!start || i.date>=start) && (!end || i.date<=end) && 
+               (!cropFilter || i.crop===cropFilter) && 
+               (!vendorFilter || i.vendor===vendorFilter)) {
+                iHtml += `<tr><td>${i.date}</td><td>${i.item}</td><td>${i.crop||'-'}</td><td>${i.vendor||'-'}</td><td>${i.amount}</td></tr>`;
+                iTotal += i.amount;
+            }
+        });
+        document.getElementById('investReportTable').innerHTML = iHtml + `<tr><td colspan='4'><b>Total</b></td><td><b>₹${iTotal}</b></td></tr></table>`;
+
+        // 3. Sales Report
+        let sTotal = 0;
+        let sHtml = "<table class='report-table'><tr><th>Date</th><th>Crop</th><th>Buyer</th><th>Amt</th></tr>";
+        db.sales.forEach(s => {
+            if((!start || s.date>=start) && (!end || s.date<=end) && 
+               (!cropFilter || s.crop===cropFilter) &&
+               (!vendorFilter || s.vendor===vendorFilter)) {
+                sHtml += `<tr><td>${s.date}</td><td>${s.crop}</td><td>${s.vendor||'-'}</td><td>${s.total}</td></tr>`;
+                sTotal += s.total;
+            }
+        });
+        document.getElementById('salesReportTable').innerHTML = sHtml + `<tr><td colspan='3'><b>Total Revenue</b></td><td><b>₹${sTotal}</b></td></tr></table>`;
+    }
+
+    function exportCSV(type) {
+        let csv = "";
+        if(type === 'worker') {
+            csv = "Date,Worker,Type,Amount,Status\n";
+            db.entries.forEach(e => csv += `${e.date},${e.worker},${e.type},${e.rate*e.status},${e.isPaid?'Paid':'Pend'}\n`);
+        } else if(type === 'invest') {
+            csv = "Date,Category,Item,Crop,Seller,Amount,Note\n";
+            db.investments.forEach(i => csv += `${i.date},${i.category},${i.item},${i.crop},${i.vendor},${i.amount},${i.note}\n`);
+        } else if(type === 'sales') {
+            csv = "Date,Crop,Weight,Unit,Rate,Total,Buyer,Note\n";
+            db.sales.forEach(s => csv += `${s.date},${s.crop},${s.weight},${s.unit},${s.rate},${s.total},${s.vendor},${s.note}\n`);
+        }
+        const blob = new Blob([csv], {type:'text/csv'});
+        const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `Kisan_${type}_Report.csv`; link.click();
+    }
+    
+    // Cloud
+    function saveCloudUrl() { localStorage.setItem('kCloud', document.getElementById('cloudUrl').value); alert("Saved"); }
+    
+    async function uploadData() { 
+        const u = localStorage.getItem('kCloud');
+        if(!u) return alert("No URL");
+        
+        const status = document.getElementById('syncStatus');
+        const barContainer = document.getElementById('progressBarContainer');
+        const bar = document.getElementById('progressBar');
+        
+        status.innerText = "Uploading...";
+        barContainer.classList.remove('hidden');
+        bar.style.width = "50%";
+        
+        try { 
+            await fetch(u, {method:'POST', body:JSON.stringify(db)}); 
+            bar.style.width = "100%";
+            status.innerText = "✅ Upload Success!";
+            setTimeout(() => { barContainer.classList.add('hidden'); bar.style.width="0%"; }, 2000);
+        } catch(e) { 
+            alert("Error"); 
+            status.innerText = "❌ Upload Failed";
+            barContainer.classList.add('hidden');
+        } 
+    }
+
+    async function downloadData() { 
+        const u = localStorage.getItem('kCloud');
+        if(!u) return alert("No URL");
+        
+        const status = document.getElementById('syncStatus');
+        const barContainer = document.getElementById('progressBarContainer');
+        const bar = document.getElementById('progressBar');
+        
+        status.innerText = "Downloading...";
+        barContainer.classList.remove('hidden');
+        bar.style.width = "50%";
+        
+        try { 
+            const r = await fetch(u); 
+            const d = await r.json(); 
+            if(d && confirm("Replace Data?")) { 
+                db = d; saveDB(); refreshUI(); 
+                bar.style.width = "100%";
+                status.innerText = "✅ Download Successful!";
+                alert("✅ Download Successful!");
+                setTimeout(() => { barContainer.classList.add('hidden'); bar.style.width="0%"; }, 2000);
+            } else {
+                barContainer.classList.add('hidden');
+                status.innerText = "Ready";
+            }
+        } catch(e) { 
+            alert("Error"); 
+            status.innerText = "❌ Download Failed";
+            barContainer.classList.add('hidden');
+        } 
     }
 
     window.onload = () => {
-        document.querySelectorAll('input[type="date"]').forEach(d => d.valueAsDate = new Date());
-        const savedUrl = localStorage.getItem('kisanCloudUrl');
-        if(savedUrl) document.getElementById('cloudUrl').value = savedUrl;
-        refreshUI();
-        renderPendingDues();
+        if(sessionStorage.getItem('kLoggedIn')) { document.getElementById('login-overlay').classList.add('hidden'); document.getElementById('app').classList.remove('hidden'); }
+        document.querySelectorAll('input[type="date"]').forEach(d => d.valueAsDate = new Date()); refreshUI(); renderAllReports();
     };
-
 </script>
 </body>
 </html>
