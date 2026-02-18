@@ -5,8 +5,6 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>Kisan Manager Pro - Full Suite</title>
-  
-  <link rel="manifest" href="manifest.json">
 
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
@@ -67,16 +65,6 @@
         border-radius: 4px; transition: 0.3s;
     }
     .navmenu a:hover, .navmenu a.active { background: var(--color-primary); color: white; }
-
-    /* --- INSTALL BUTTON STYLE --- */
-    #btnInstallApp {
-        background: #8e44ad; color: white; border: none; padding: 5px 10px;
-        border-radius: 4px; font-weight: bold; cursor: pointer; margin-left: 10px;
-        display: none; /* Hidden by default */
-        font-size: 12px;
-        animation: pulse 2s infinite;
-    }
-    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
     /* --- LAYOUT --- */
     .container { max-width: 1200px; margin: 0 auto; padding: 0 10px 80px 10px; }
@@ -176,7 +164,6 @@
             <div class="logo">
                 <img src="logo.png" alt="Logo" onerror="this.style.display='none'"> 
                 <h1>Kisan Manager</h1>
-                <button id="btnInstallApp" onclick="installPWA()">📲 Install</button>
             </div>
             <nav class="navmenu">
                 <ul>
@@ -505,7 +492,7 @@
     if(!db.investments) db.investments = [];
     if(!db.sales) db.sales = [];
     if(!db.sellers) db.sellers = []; 
-    if(!db.buyers) db.buyers = [];    
+    if(!db.buyers) db.buyers = [];   
 
     function saveDB() { localStorage.setItem('kisanDB', JSON.stringify(db)); }
 
@@ -609,70 +596,407 @@
             vendor: document.getElementById('selBuyerSale').value, 
             note: document.getElementById('saleNote').value
         };
-        // --- FIXED CODE CONTINUATION START ---
         if(!sale.date || !sale.crop) return alert("Missing Date or Crop");
         
         if(id) { const idx = db.sales.findIndex(x=>x.id==id); if(idx>-1) db.sales[idx]=sale; }
         else { db.sales.push(sale); }
         saveDB(); resetForm(); refreshUI();
     }
-    
-    // --- 4. INSTALL APP FUNCTIONALITY (PWA) ---
-    // Register Service Worker
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('sw.js')
-                .then(reg => console.log('SW Registered'))
-                .catch(err => console.log('SW Fail', err));
+    function deleteSale(id) { if(confirm("Delete?")) { db.sales=db.sales.filter(x=>x.id!==id); saveDB(); refreshUI(); } }
+    function editSale(id) {
+        const e=db.sales.find(x=>x.id==id); if(!e)return;
+        showTab('sales'); document.getElementById('editSaleId').value=e.id;
+        document.getElementById('saleDate').value=e.date; document.getElementById('selCropSale').value=e.crop;
+        document.getElementById('saleWeight').value=e.weight; document.getElementById('saleUnit').value=e.unit || 'kg';
+        document.getElementById('saleRate').value=e.rate; document.getElementById('saleTotal').value=e.total; 
+        document.getElementById('selBuyerSale').value=e.vendor; document.getElementById('saleNote').value=e.note;
+        document.getElementById('btnCancelSale').classList.remove('hidden');
+    }
+
+    // --- 4. ADVANCES ---
+    function saveAdvance() {
+        const id = document.getElementById('editAdvId').value;
+        const adv = {
+            id: id ? parseInt(id) : Date.now(),
+            date: document.getElementById('advDate').value,
+            worker: document.getElementById('selWorkerAdv').value,
+            amount: parseFloat(document.getElementById('advAmount').value)||0,
+            note: document.getElementById('advNote').value
+        };
+        if(!adv.date || !adv.worker) return alert("Missing Info");
+        if(id) { const idx = db.advances.findIndex(a=>a.id==id); if(idx>-1) db.advances[idx]=adv; } 
+        else { db.advances.push(adv); }
+        saveDB(); resetForm(); refreshUI();
+    }
+    function deleteAdv(id) { if(confirm("Delete?")) { db.advances=db.advances.filter(a=>a.id!==id); saveDB(); refreshUI(); } }
+    function editAdv(id) {
+        const a=db.advances.find(x=>x.id==id); if(!a)return;
+        showTab('payments'); document.getElementById('editAdvId').value=a.id;
+        document.getElementById('advDate').value=a.date; document.getElementById('selWorkerAdv').value=a.worker;
+        document.getElementById('advAmount').value=a.amount; document.getElementById('advNote').value=a.note;
+        document.getElementById('btnCancelAdv').classList.remove('hidden');
+    }
+
+    // --- PAYMENTS FILTER ---
+    function renderPendingDues() {
+        const filterW = document.getElementById('pendingFilterWorker').value;
+        let html = ""; let count = 0;
+        db.entries.slice().reverse().forEach(e => {
+            if(!e.isPaid && (filterW === "" || e.worker === filterW)) {
+                html += `<div class="log-item">
+                    <div><b>${e.worker}</b><br><span style="color:#888">${e.date}</span></div>
+                    <div style="text-align:right"><b style="color:red">₹${e.rate*e.status}</b><br>
+                    <button class="btn-mini btn-blue" onclick="markPaid(${e.id})">Mark Paid</button></div>
+                </div>`;
+                count++;
+            }
         });
+        document.getElementById('pendingDuesList').innerHTML = count ? html : "<p style='text-align:center;color:#ccc'>No dues.</p>";
+    }
+    function markPaid(id) {
+        const idx=db.entries.findIndex(e=>e.id==id);
+        if(idx>-1) { db.entries[idx].isPaid=true; saveDB(); renderPendingDues(); refreshUI(); }
     }
 
-    // Handle Install Prompt
-    let deferredPrompt;
-    const installBtn = document.getElementById('btnInstallApp');
-
-    window.addEventListener('beforeinstallprompt', (e) => {
-        // Prevent default mini-infobar
-        e.preventDefault();
-        // Stash event
-        deferredPrompt = e;
-        // Show button
-        if(installBtn) installBtn.style.display = 'block';
-    });
-
-    async function installPWA() {
-        if (!deferredPrompt) return;
-        // Show prompt
-        deferredPrompt.prompt();
-        // Wait for result
-        const { outcome } = await deferredPrompt.userChoice;
-        console.log(`User choice: ${outcome}`);
-        // Clear prompt
-        deferredPrompt = null;
-        // Hide button
-        if(installBtn) installBtn.style.display = 'none';
+    // --- MASTERS & USERS ---
+    function addItem(type) {
+        const val = document.getElementById('masterInput').value.trim();
+        if(!val) return alert("Empty");
+        if(type==='workers') db.workers.push({name:val, rate:0});
+        else db[type].push(val);
+        document.getElementById('masterInput').value=""; saveDB(); refreshUI();
+    }
+    function deleteMaster(type,i) { if(confirm("Remove?")) { db[type].splice(i,1); saveDB(); refreshUI(); } }
+    
+    // User Edit/Save Logic
+    function saveUser() {
+        const u = document.getElementById('newUsername').value;
+        const p = document.getElementById('newPassword').value;
+        const idx = document.getElementById('editUserIdx').value;
+        
+        if(!u || !p) return alert("Enter User & Pass");
+        
+        if(idx !== "") { 
+            db.users[idx] = {name:u, pass:p};
+            document.getElementById('btnSaveUser').innerText = "Add User";
+            document.getElementById('editUserIdx').value = "";
+        } else { 
+            db.users.push({name:u, pass:p});
+        }
+        saveDB(); refreshUI(); 
+        document.getElementById('newUsername').value=""; 
+        document.getElementById('newPassword').value="";
+    }
+    
+    function editUser(i) {
+        const u = db.users[i];
+        document.getElementById('newUsername').value = u.name;
+        document.getElementById('newPassword').value = u.pass;
+        document.getElementById('editUserIdx').value = i;
+        document.getElementById('btnSaveUser').innerText = "Update User";
+    }
+    
+    function deleteUser(i) { 
+        if(confirm("Delete User?")) { 
+            db.users.splice(i, 1); 
+            if(document.getElementById('editUserIdx').value == i) {
+                document.getElementById('editUserIdx').value = "";
+                document.getElementById('btnSaveUser').innerText = "Add User";
+                document.getElementById('newUsername').value = "";
+                document.getElementById('newPassword').value = "";
+            }
+            saveDB(); refreshUI(); 
+        } 
     }
 
-    // Hide button if installed
-    window.addEventListener('appinstalled', () => {
-        if(installBtn) installBtn.style.display = 'none';
-        console.log('App Installed');
-    });
-
-    // --- DUMMY FUNCTION FOR UI REFRESH (NEEDED FOR CODE TO RUN WITHOUT ERROR) ---
-    // You likely have this in your full code, adding here just in case to prevent crash
-    function refreshUI() {
-        console.log("UI Refreshed");
-        // Your existing rendering logic for lists/dropdowns goes here
-        // If you have the rest of the functions (renderPendingDues, resetForm, etc),
-        // keep them. I have assumed they exist based on your previous snippet.
-    }
     function resetForm() {
-        document.querySelectorAll('input').forEach(i => i.value='');
+        document.querySelectorAll('input').forEach(i => { if(i.type!=='date' && i.id!=='cloudUrl') i.value=""; });
+        ['selWorkType','selFarm','selCrop','selSellerInv','selBuyerSale','selCropSale','invCrop'].forEach(id => {
+            if(document.getElementById(id)) document.getElementById(id).value="";
+        });
+        document.getElementById('payStatus').value="Pending";
         document.querySelectorAll('.btn-red').forEach(b => b.classList.add('hidden'));
+        document.getElementById('editWorkId').value=""; document.getElementById('editAdvId').value="";
+        document.getElementById('editInvestId').value=""; document.getElementById('editSaleId').value="";
     }
-    // --- END FIXED CODE ---
+    function fillWorkType() { document.getElementById('manualWorkType').value = document.getElementById('selWorkType').value; }
 
+    function refreshUI() {
+        const fill = (id, list, isObj) => {
+            const el = document.getElementById(id); if(!el) return;
+            const old = el.value; el.innerHTML = '<option value="">-- Select --</option>';
+            list.forEach(i => { const val = isObj ? i.name : i; el.innerHTML += `<option value="${val}">${val}</option>`; });
+            if(old) el.value = old;
+        };
+        fill('selWorker', db.workers, true); fill('selWorkerAdv', db.workers, true); fill('pendingFilterWorker', db.workers, true);
+        fill('selFarm', db.farms, false); fill('selCrop', db.crops, false); fill('selWorkType', db.workTypes, false); 
+        fill('rptCrop', db.crops, false); fill('invCrop', db.crops, false);
+        fill('selSellerInv', db.sellers, false); 
+        fill('selBuyerSale', db.buyers, false);  
+        fill('selCropSale', db.crops, false);
+
+        // Fill Vendor Report Filter
+        const allVendors = [...new Set([...db.sellers, ...db.buyers])];
+        fill('rptVendor', allVendors, false);
+
+        window.updateDefaultRate = () => {
+            const w = db.workers.find(x => x.name === document.getElementById('selWorker').value);
+            // UPDATED: Show placeholder '0' if rate is 0
+            document.getElementById('workRate').value = (w && w.rate > 0) ? w.rate : "";
+        }
+
+        const renderLogList = (data, elemId, fnEdit, fnDel, fmtMain, fmtRight) => {
+            let h = "";
+            data.slice().reverse().slice(0,20).forEach(x => {
+                h += `<div class="log-item"><div>${fmtMain(x)}</div><div style="text-align:right">${fmtRight(x)}<br>
+                <button class="btn-mini btn-blue" onclick="${fnEdit}(${x.id})">Edit</button>
+                <button class="btn-mini btn-red" onclick="${fnDel}(${x.id})">X</button></div></div>`;
+            });
+            document.getElementById(elemId).innerHTML = h;
+        };
+
+        renderLogList(db.entries, 'quickWorkLog', 'editWork', 'deleteWork', 
+            e => `<b>${e.worker}</b><br><span style="color:#888">${e.date}</span>`, 
+            e => `<span style="color:${e.isPaid?'green':'red'}">${e.isPaid?'Paid':'Pend'}</span>`);
+            
+        renderLogList(db.investments, 'investLog', 'editInvest', 'deleteInvest', 
+            i => `<b>${i.item}</b><br><span style="color:#888">${i.date} • ${i.crop || '-'}</span>`,
+            i => `<b style="color:#e67e22">₹${i.amount}</b>`);
+
+        renderLogList(db.sales, 'salesLog', 'editSale', 'deleteSale',
+            s => `<b>${s.crop}</b><br><span style="color:#888">${s.date}</span>`,
+            s => `<b style="color:#3498db">₹${s.total}</b>`);
+
+        renderLogList(db.advances, 'advHistoryLog', 'editAdv', 'deleteAdv',
+            a => `<b>${a.worker}</b><br><span style="color:#888">${a.date}</span>`,
+            a => `<b style="color:blue">₹${a.amount}</b>`);
+
+        renderPendingDues();
+
+        let mhtml = "";
+        ['workers','farms','crops','sellers','buyers','workTypes'].forEach(k => {
+            mhtml += `<div class="master-header">${k}</div>`;
+            db[k].forEach((v,i) => {
+                const n = typeof v === 'object' ? v.name : v;
+                mhtml += `<div class="log-item" style="padding:5px 0;">${n} <button class="btn-mini btn-red" onclick="deleteMaster('${k}',${i})">X</button></div>`;
+            });
+        });
+        document.getElementById('masterListDisplay').innerHTML = mhtml;
+        
+        let uhtml = "";
+        db.users.forEach((u,i) => { 
+            uhtml += `<div class="log-item">
+                <span>👤 ${u.name}</span>
+                <div>
+                    <button class="btn-mini btn-blue" onclick="editUser(${i})">Edit</button>
+                    <button class="btn-mini btn-red" onclick="deleteUser(${i})">Delete</button>
+                </div>
+            </div>`; 
+        });
+        document.getElementById('userListDisplay').innerHTML = uhtml;
+    }
+
+    // --- REPORTS ---
+    function showReport(id) {
+        document.querySelectorAll('.rpt-section').forEach(d => d.classList.add('hidden'));
+        document.getElementById(id).classList.remove('hidden');
+        document.querySelectorAll('.rpt-tab-btn').forEach(b => b.classList.remove('active'));
+        event.target.classList.add('active');
+
+        const vContainer = document.getElementById('rptVendorContainer');
+        if(id === 'rptWorker') {
+            vContainer.classList.add('hidden');
+            document.getElementById('rptVendor').value = ""; 
+        } else {
+            vContainer.classList.remove('hidden');
+        }
+
+        renderAllReports();
+    }
+
+    function renderAllReports() {
+        const start = document.getElementById('rptStart').value;
+        const end = document.getElementById('rptEnd').value;
+        const cropFilter = document.getElementById('rptCrop').value;
+        const vendorFilter = document.getElementById('rptVendor').value;
+        
+        // 1. Worker Report
+        let wHtml = "<table class='report-table'><tr><th>Worker</th><th>Pend</th><th>Adv</th><th>Net</th></tr>";
+        db.workers.forEach(w => {
+            let p = 0; let a = 0;
+            db.entries.forEach(e => { if(e.worker===w.name && !e.isPaid && (!start || e.date>=start) && (!end || e.date<=end) && (!cropFilter || e.crop===cropFilter)) p += (e.rate*e.status); });
+            db.advances.forEach(ad => { if(ad.worker===w.name && (!start || ad.date>=start) && (!end || ad.date<=end)) a += ad.amount; });
+            wHtml += `<tr><td>${w.name}</td><td>${p}</td><td>${a}</td><td style="color:${(p-a)<0?'red':'green'}">${p-a}</td></tr>`;
+        });
+        document.getElementById('workerReportTable').innerHTML = wHtml + "</table>";
+
+        // 2. Invest Report
+        let iTotal = 0;
+        let iHtml = "<table class='report-table'><tr><th>Date</th><th>Item</th><th>Crop</th><th>Seller</th><th>Amt</th></tr>";
+        db.investments.forEach(i => {
+            if((!start || i.date>=start) && (!end || i.date<=end) && 
+               (!cropFilter || i.crop===cropFilter) && 
+               (!vendorFilter || i.vendor===vendorFilter)) {
+                iHtml += `<tr><td>${i.date}</td><td>${i.item}</td><td>${i.crop||'-'}</td><td>${i.vendor||'-'}</td><td>${i.amount}</td></tr>`;
+                iTotal += i.amount;
+            }
+        });
+        document.getElementById('investReportTable').innerHTML = iHtml + `<tr><td colspan='4'><b>Total</b></td><td><b>₹${iTotal}</b></td></tr></table>`;
+
+        // 3. Sales Report
+        let sTotal = 0;
+        let sHtml = "<table class='report-table'><tr><th>Date</th><th>Crop</th><th>Buyer</th><th>Amt</th></tr>";
+        db.sales.forEach(s => {
+            if((!start || s.date>=start) && (!end || s.date<=end) && 
+               (!cropFilter || s.crop===cropFilter) &&
+               (!vendorFilter || s.vendor===vendorFilter)) {
+                sHtml += `<tr><td>${s.date}</td><td>${s.crop}</td><td>${s.vendor||'-'}</td><td>${s.total}</td></tr>`;
+                sTotal += s.total;
+            }
+        });
+        document.getElementById('salesReportTable').innerHTML = sHtml + `<tr><td colspan='3'><b>Total Revenue</b></td><td><b>₹${sTotal}</b></td></tr></table>`;
+    }
+
+    function exportCSV(type) {
+        let csv = "";
+        if(type === 'worker') {
+            csv = "Date,Worker,Type,Amount,Status\n";
+            db.entries.forEach(e => csv += `${e.date},${e.worker},${e.type},${e.rate*e.status},${e.isPaid?'Paid':'Pend'}\n`);
+        } else if(type === 'invest') {
+            csv = "Date,Category,Item,Crop,Seller,Amount,Note\n";
+            db.investments.forEach(i => csv += `${i.date},${i.category},${i.item},${i.crop},${i.vendor},${i.amount},${i.note}\n`);
+        } else if(type === 'sales') {
+            csv = "Date,Crop,Weight,Unit,Rate,Total,Buyer,Note\n";
+            db.sales.forEach(s => csv += `${s.date},${s.crop},${s.weight},${s.unit},${s.rate},${s.total},${s.vendor},${s.note}\n`);
+        }
+        const blob = new Blob([csv], {type:'text/csv'});
+        const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `Kisan_${type}_Report.csv`; link.click();
+    }
+    
+    // Cloud & Auto Sync
+    let upTimer, downTimer;
+
+    function saveCloudUrl() { 
+        localStorage.setItem('kCloud', document.getElementById('cloudUrl').value); 
+        localStorage.setItem('kAutoUp', document.getElementById('autoUpFreq').value);
+        localStorage.setItem('kAutoDown', document.getElementById('autoDownFreq').value);
+        alert("Settings Saved!");
+        setupAutoSync();
+    }
+    
+    function updateSyncSettings() {
+        const up = document.getElementById('autoUpFreq').value;
+        const down = document.getElementById('autoDownFreq').value;
+        localStorage.setItem('kAutoUp', up);
+        localStorage.setItem('kAutoDown', down);
+        setupAutoSync();
+    }
+    
+    function setupAutoSync() {
+        if(upTimer) clearInterval(upTimer);
+        if(downTimer) clearInterval(downTimer);
+
+        const upFreq = parseInt(localStorage.getItem('kAutoUp') || 0);
+        const downFreq = parseInt(localStorage.getItem('kAutoDown') || 0);
+
+        // Update UI
+        document.getElementById('autoUpFreq').value = upFreq;
+        document.getElementById('autoDownFreq').value = downFreq;
+
+        if(upFreq > 0) {
+            upTimer = setInterval(() => uploadData(true), upFreq * 60000);
+            console.log("Auto Upload set for " + upFreq + " mins");
+        }
+        if(downFreq > 0) {
+            downTimer = setInterval(() => downloadData(true), downFreq * 60000);
+            console.log("Auto Download set for " + downFreq + " mins");
+        }
+    }
+    
+    async function uploadData(isAuto = false) { 
+        const u = localStorage.getItem('kCloud');
+        if(!u) { if(!isAuto) alert("No URL"); return; }
+        
+        const status = document.getElementById('syncStatus');
+        const barContainer = document.getElementById('progressBarContainer');
+        const bar = document.getElementById('progressBar');
+        
+        if(!isAuto) {
+            status.innerText = "Uploading...";
+            barContainer.classList.remove('hidden');
+            bar.style.width = "50%";
+        }
+        
+        try { 
+            await fetch(u, {method:'POST', body:JSON.stringify(db)}); 
+            if(!isAuto) {
+                bar.style.width = "100%";
+                status.innerText = "✅ Upload Success!";
+                setTimeout(() => { barContainer.classList.add('hidden'); bar.style.width="0%"; }, 2000);
+            } else {
+                status.innerText = "Last Auto-Upload: " + new Date().toLocaleTimeString();
+            }
+        } catch(e) { 
+            if(!isAuto) {
+                alert("Error"); 
+                status.innerText = "❌ Upload Failed";
+                barContainer.classList.add('hidden');
+            }
+        } 
+    }
+
+    async function downloadData(isAuto = false) { 
+        const u = localStorage.getItem('kCloud');
+        if(!u) { if(!isAuto) alert("No URL"); return; }
+        
+        const status = document.getElementById('syncStatus');
+        const barContainer = document.getElementById('progressBarContainer');
+        const bar = document.getElementById('progressBar');
+        
+        if(!isAuto) {
+            status.innerText = "Downloading...";
+            barContainer.classList.remove('hidden');
+            bar.style.width = "50%";
+        }
+        
+        try { 
+            const r = await fetch(u); 
+            const d = await r.json(); 
+            
+            if(d && (isAuto || confirm("Replace Data?"))) { 
+                db = d; saveDB(); refreshUI(); 
+                if(!isAuto) {
+                    bar.style.width = "100%";
+                    status.innerText = "✅ Download Successful!";
+                    alert("✅ Download Successful!");
+                    setTimeout(() => { barContainer.classList.add('hidden'); bar.style.width="0%"; }, 2000);
+                } else {
+                    status.innerText = "Last Auto-Download: " + new Date().toLocaleTimeString();
+                }
+            } else if(!isAuto) {
+                barContainer.classList.add('hidden');
+                status.innerText = "Ready";
+            }
+        } catch(e) { 
+            if(!isAuto) {
+                alert("Error"); 
+                status.innerText = "❌ Download Failed";
+                barContainer.classList.add('hidden');
+            }
+        } 
+    }
+
+    window.onload = () => {
+        if(sessionStorage.getItem('kLoggedIn')) { document.getElementById('login-overlay').classList.add('hidden'); document.getElementById('app').classList.remove('hidden'); }
+        document.querySelectorAll('input[type="date"]').forEach(d => d.valueAsDate = new Date()); 
+        
+        const savedUrl = localStorage.getItem('kCloud');
+        if(savedUrl) document.getElementById('cloudUrl').value = savedUrl;
+
+        refreshUI(); 
+        renderAllReports();
+        setupAutoSync(); // Init Sync
+    };
 </script>
 </body>
 </html>
