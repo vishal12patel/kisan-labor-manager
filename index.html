@@ -51,7 +51,10 @@
         position: sticky; top: 0; z-index: 1000;
     }
     .logo { display: flex; align-items: center; gap: 8px; }
-    .logo img { height: 35px; width: auto; }
+    
+    /* LOGO PATH */
+    .logo img { height: 40px; width: auto; }
+    
     .logo h1 { font-family: var(--font-heading); color: var(--color-primary); margin: 0; font-size: 18px; }
 
     /* --- NAV --- */
@@ -122,20 +125,10 @@
 
     /* --- PROGRESS BAR --- */
     .progress-container {
-        width: 100%;
-        background-color: #e0e0e0;
-        border-radius: 5px;
-        margin-top: 10px;
-        height: 8px;
-        overflow: hidden;
+        width: 100%; background-color: #e0e0e0; border-radius: 5px; margin-top: 10px;
+        height: 8px; overflow: hidden;
     }
-    
-    .progress-bar {
-        width: 0%;
-        height: 100%;
-        background-color: var(--color-primary);
-        transition: width 0.4s ease-in-out;
-    }
+    .progress-bar { width: 0%; height: 100%; background-color: var(--color-primary); transition: width 0.4s ease-in-out; }
 
     /* --- UTILS --- */
     .hidden { display: none !important; }
@@ -156,7 +149,7 @@
 
     <div id="login-overlay">
         <div class="login-box">
-            <img src="assets/img/logo.png" alt="Logo" style="height:50px; margin-bottom:10px;" onerror="this.style.display='none'">
+            <img src="logo.png" alt="Logo" style="height:50px; margin-bottom:10px;" onerror="this.style.display='none'">
             <h2 style="color:var(--color-primary); margin:0 0 15px 0;">Kisan Pro</h2>
             <input type="text" id="loginUser" placeholder="Username">
             <input type="password" id="loginPass" placeholder="Password">
@@ -169,7 +162,7 @@
         
         <header class="header">
             <div class="logo">
-                <img src="assets/img/logo.png" alt="Logo" onerror="this.style.display='none'"> 
+                <img src="logo.png" alt="Logo" onerror="this.style.display='none'"> 
                 <h1>Kisan Manager</h1>
             </div>
             <nav class="navmenu">
@@ -428,20 +421,41 @@
                     <div class="col-form">
                         <div class="card">
                             <h3>👤 Users & Cloud</h3>
+                            <input type="hidden" id="editUserIdx">
                             <div style="background:#f9f9f9; padding:10px;">
                                 <input type="text" id="newUsername" placeholder="New User">
                                 <input type="text" id="newPassword" placeholder="New Pass">
-                                <button class="btn btn-mini btn-blue" onclick="addUser()">Add User</button>
+                                <button class="btn btn-mini btn-blue" id="btnSaveUser" onclick="saveUser()">Add User</button>
                             </div>
                             <div id="userListDisplay" style="margin-top:10px;"></div>
                             
-                            <h4 style="margin-top:20px;">Backup</h4>
+                            <h4 style="margin-top:20px;">Backup & Auto Sync</h4>
                             <input type="text" id="cloudUrl" placeholder="Script URL">
                             <button class="btn btn-mini" onclick="saveCloudUrl()">Save URL</button>
                             
+                            <div class="row-inputs" style="margin-top:10px;">
+                                <div>
+                                    <label>Auto Upload</label>
+                                    <select id="autoUpFreq" onchange="updateSyncSettings()">
+                                        <option value="0">Off</option>
+                                        <option value="1">1 Min</option>
+                                        <option value="5">5 Mins</option>
+                                        <option value="30">30 Mins</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label>Auto Download</label>
+                                    <select id="autoDownFreq" onchange="updateSyncSettings()">
+                                        <option value="0">Off</option>
+                                        <option value="5">5 Mins</option>
+                                        <option value="60">1 Hour</option>
+                                    </select>
+                                </div>
+                            </div>
+
                             <div style="margin-top:10px;">
-                                <button class="btn btn-blue" onclick="uploadData()">⬆️ Upload</button>
-                                <button class="btn btn-blue" style="margin-top:5px;" onclick="downloadData()">⬇️ Download</button>
+                                <button class="btn btn-blue" onclick="uploadData()">⬆️ Upload Now</button>
+                                <button class="btn btn-blue" style="margin-top:5px;" onclick="downloadData()">⬇️ Download Now</button>
                             </div>
                             
                             <div id="progressBarContainer" class="progress-container hidden">
@@ -644,7 +658,7 @@
         if(idx>-1) { db.entries[idx].isPaid=true; saveDB(); renderPendingDues(); refreshUI(); }
     }
 
-    // --- MASTERS ---
+    // --- MASTERS & USERS ---
     function addItem(type) {
         const val = document.getElementById('masterInput').value.trim();
         if(!val) return alert("Empty");
@@ -653,7 +667,47 @@
         document.getElementById('masterInput').value=""; saveDB(); refreshUI();
     }
     function deleteMaster(type,i) { if(confirm("Remove?")) { db[type].splice(i,1); saveDB(); refreshUI(); } }
-    function addUser() { const u=document.getElementById('newUsername').value; const p=document.getElementById('newPassword').value; if(u&&p) { db.users.push({name:u, pass:p}); saveDB(); refreshUI(); document.getElementById('newUsername').value=""; } }
+    
+    // User Edit/Save Logic
+    function saveUser() {
+        const u = document.getElementById('newUsername').value;
+        const p = document.getElementById('newPassword').value;
+        const idx = document.getElementById('editUserIdx').value;
+        
+        if(!u || !p) return alert("Enter User & Pass");
+        
+        if(idx !== "") { 
+            db.users[idx] = {name:u, pass:p};
+            document.getElementById('btnSaveUser').innerText = "Add User";
+            document.getElementById('editUserIdx').value = "";
+        } else { 
+            db.users.push({name:u, pass:p});
+        }
+        saveDB(); refreshUI(); 
+        document.getElementById('newUsername').value=""; 
+        document.getElementById('newPassword').value="";
+    }
+    
+    function editUser(i) {
+        const u = db.users[i];
+        document.getElementById('newUsername').value = u.name;
+        document.getElementById('newPassword').value = u.pass;
+        document.getElementById('editUserIdx').value = i;
+        document.getElementById('btnSaveUser').innerText = "Update User";
+    }
+    
+    function deleteUser(i) { 
+        if(confirm("Delete User?")) { 
+            db.users.splice(i, 1); 
+            if(document.getElementById('editUserIdx').value == i) {
+                document.getElementById('editUserIdx').value = "";
+                document.getElementById('btnSaveUser').innerText = "Add User";
+                document.getElementById('newUsername').value = "";
+                document.getElementById('newPassword').value = "";
+            }
+            saveDB(); refreshUI(); 
+        } 
+    }
 
     function resetForm() {
         document.querySelectorAll('input').forEach(i => { if(i.type!=='date' && i.id!=='cloudUrl') i.value=""; });
@@ -687,7 +741,8 @@
 
         window.updateDefaultRate = () => {
             const w = db.workers.find(x => x.name === document.getElementById('selWorker').value);
-            if(w) document.getElementById('workRate').value = w.rate;
+            // UPDATED: Show placeholder '0' if rate is 0
+            document.getElementById('workRate').value = (w && w.rate > 0) ? w.rate : "";
         }
 
         const renderLogList = (data, elemId, fnEdit, fnDel, fmtMain, fmtRight) => {
@@ -729,7 +784,15 @@
         document.getElementById('masterListDisplay').innerHTML = mhtml;
         
         let uhtml = "";
-        db.users.forEach((u,i) => { uhtml += `<div class="log-item">👤 ${u.name}</div>`; });
+        db.users.forEach((u,i) => { 
+            uhtml += `<div class="log-item">
+                <span>👤 ${u.name}</span>
+                <div>
+                    <button class="btn-mini btn-blue" onclick="editUser(${i})">Edit</button>
+                    <button class="btn-mini btn-red" onclick="deleteUser(${i})">Delete</button>
+                </div>
+            </div>`; 
+        });
         document.getElementById('userListDisplay').innerHTML = uhtml;
     }
 
@@ -740,11 +803,10 @@
         document.querySelectorAll('.rpt-tab-btn').forEach(b => b.classList.remove('active'));
         event.target.classList.add('active');
 
-        // Logic: HIDE vendor filter if Worker Tab selected
         const vContainer = document.getElementById('rptVendorContainer');
         if(id === 'rptWorker') {
             vContainer.classList.add('hidden');
-            document.getElementById('rptVendor').value = ""; // Reset
+            document.getElementById('rptVendor').value = ""; 
         } else {
             vContainer.classList.remove('hidden');
         }
@@ -811,68 +873,129 @@
         const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `Kisan_${type}_Report.csv`; link.click();
     }
     
-    // Cloud
-    function saveCloudUrl() { localStorage.setItem('kCloud', document.getElementById('cloudUrl').value); alert("Saved"); }
+    // Cloud & Auto Sync
+    let upTimer, downTimer;
+
+    function saveCloudUrl() { 
+        localStorage.setItem('kCloud', document.getElementById('cloudUrl').value); 
+        localStorage.setItem('kAutoUp', document.getElementById('autoUpFreq').value);
+        localStorage.setItem('kAutoDown', document.getElementById('autoDownFreq').value);
+        alert("Settings Saved!");
+        setupAutoSync();
+    }
     
-    async function uploadData() { 
+    function updateSyncSettings() {
+        const up = document.getElementById('autoUpFreq').value;
+        const down = document.getElementById('autoDownFreq').value;
+        localStorage.setItem('kAutoUp', up);
+        localStorage.setItem('kAutoDown', down);
+        setupAutoSync();
+    }
+    
+    function setupAutoSync() {
+        if(upTimer) clearInterval(upTimer);
+        if(downTimer) clearInterval(downTimer);
+
+        const upFreq = parseInt(localStorage.getItem('kAutoUp') || 0);
+        const downFreq = parseInt(localStorage.getItem('kAutoDown') || 0);
+
+        // Update UI
+        document.getElementById('autoUpFreq').value = upFreq;
+        document.getElementById('autoDownFreq').value = downFreq;
+
+        if(upFreq > 0) {
+            upTimer = setInterval(() => uploadData(true), upFreq * 60000);
+            console.log("Auto Upload set for " + upFreq + " mins");
+        }
+        if(downFreq > 0) {
+            downTimer = setInterval(() => downloadData(true), downFreq * 60000);
+            console.log("Auto Download set for " + downFreq + " mins");
+        }
+    }
+    
+    async function uploadData(isAuto = false) { 
         const u = localStorage.getItem('kCloud');
-        if(!u) return alert("No URL");
+        if(!u) { if(!isAuto) alert("No URL"); return; }
         
         const status = document.getElementById('syncStatus');
         const barContainer = document.getElementById('progressBarContainer');
         const bar = document.getElementById('progressBar');
         
-        status.innerText = "Uploading...";
-        barContainer.classList.remove('hidden');
-        bar.style.width = "50%";
+        if(!isAuto) {
+            status.innerText = "Uploading...";
+            barContainer.classList.remove('hidden');
+            bar.style.width = "50%";
+        }
         
         try { 
             await fetch(u, {method:'POST', body:JSON.stringify(db)}); 
-            bar.style.width = "100%";
-            status.innerText = "✅ Upload Success!";
-            setTimeout(() => { barContainer.classList.add('hidden'); bar.style.width="0%"; }, 2000);
+            if(!isAuto) {
+                bar.style.width = "100%";
+                status.innerText = "✅ Upload Success!";
+                setTimeout(() => { barContainer.classList.add('hidden'); bar.style.width="0%"; }, 2000);
+            } else {
+                status.innerText = "Last Auto-Upload: " + new Date().toLocaleTimeString();
+            }
         } catch(e) { 
-            alert("Error"); 
-            status.innerText = "❌ Upload Failed";
-            barContainer.classList.add('hidden');
+            if(!isAuto) {
+                alert("Error"); 
+                status.innerText = "❌ Upload Failed";
+                barContainer.classList.add('hidden');
+            }
         } 
     }
 
-    async function downloadData() { 
+    async function downloadData(isAuto = false) { 
         const u = localStorage.getItem('kCloud');
-        if(!u) return alert("No URL");
+        if(!u) { if(!isAuto) alert("No URL"); return; }
         
         const status = document.getElementById('syncStatus');
         const barContainer = document.getElementById('progressBarContainer');
         const bar = document.getElementById('progressBar');
         
-        status.innerText = "Downloading...";
-        barContainer.classList.remove('hidden');
-        bar.style.width = "50%";
+        if(!isAuto) {
+            status.innerText = "Downloading...";
+            barContainer.classList.remove('hidden');
+            bar.style.width = "50%";
+        }
         
         try { 
             const r = await fetch(u); 
             const d = await r.json(); 
-            if(d && confirm("Replace Data?")) { 
+            
+            if(d && (isAuto || confirm("Replace Data?"))) { 
                 db = d; saveDB(); refreshUI(); 
-                bar.style.width = "100%";
-                status.innerText = "✅ Download Successful!";
-                alert("✅ Download Successful!");
-                setTimeout(() => { barContainer.classList.add('hidden'); bar.style.width="0%"; }, 2000);
-            } else {
+                if(!isAuto) {
+                    bar.style.width = "100%";
+                    status.innerText = "✅ Download Successful!";
+                    alert("✅ Download Successful!");
+                    setTimeout(() => { barContainer.classList.add('hidden'); bar.style.width="0%"; }, 2000);
+                } else {
+                    status.innerText = "Last Auto-Download: " + new Date().toLocaleTimeString();
+                }
+            } else if(!isAuto) {
                 barContainer.classList.add('hidden');
                 status.innerText = "Ready";
             }
         } catch(e) { 
-            alert("Error"); 
-            status.innerText = "❌ Download Failed";
-            barContainer.classList.add('hidden');
+            if(!isAuto) {
+                alert("Error"); 
+                status.innerText = "❌ Download Failed";
+                barContainer.classList.add('hidden');
+            }
         } 
     }
 
     window.onload = () => {
         if(sessionStorage.getItem('kLoggedIn')) { document.getElementById('login-overlay').classList.add('hidden'); document.getElementById('app').classList.remove('hidden'); }
-        document.querySelectorAll('input[type="date"]').forEach(d => d.valueAsDate = new Date()); refreshUI(); renderAllReports();
+        document.querySelectorAll('input[type="date"]').forEach(d => d.valueAsDate = new Date()); 
+        
+        const savedUrl = localStorage.getItem('kCloud');
+        if(savedUrl) document.getElementById('cloudUrl').value = savedUrl;
+
+        refreshUI(); 
+        renderAllReports();
+        setupAutoSync(); // Init Sync
     };
 </script>
 </body>
