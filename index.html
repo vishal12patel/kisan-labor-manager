@@ -656,7 +656,7 @@
     function saveWork() {
         const id = document.getElementById('editWorkId').value;
         const entry = {
-            id: id ? parseInt(id) : Date.now(),
+            id: id ? id.toString() : "ID-" + Date.now() + Math.floor(Math.random() * 1000),
             date: document.getElementById('workDate').value,
             worker: document.getElementById('selWorker').value,
             rate: parseFloat(document.getElementById('workRate').value)||0,
@@ -686,7 +686,7 @@
     function saveInvest() {
         const id = document.getElementById('editInvestId').value;
   const inv = {
-    id: id ? parseInt(id) : Date.now(),
+      id: id ? id.toString() : "ID-" + Date.now() + Math.floor(Math.random() * 1000),
     date: document.getElementById('invDate').value,
     crop: document.getElementById('invCrop').value,
     category: document.getElementById('invCategory').value,
@@ -723,7 +723,7 @@
     function saveSale() {
         const id = document.getElementById('editSaleId').value;
         const sale = {
-            id: id ? parseInt(id) : Date.now(),
+            id: id ? id.toString() : "ID-" + Date.now() + Math.floor(Math.random() * 1000),
             date: document.getElementById('saleDate').value,
             crop: document.getElementById('selCropSale').value,
             weight: parseFloat(document.getElementById('saleWeight').value)||0,
@@ -754,7 +754,7 @@
     function saveAdvance() {
         const id = document.getElementById('editAdvId').value;
         const adv = {
-            id: id ? parseInt(id) : Date.now(),
+            id: id ? id.toString() : "ID-" + Date.now() + Math.floor(Math.random() * 1000),
             date: document.getElementById('advDate').value,
             worker: document.getElementById('selWorkerAdv').value,
             amount: parseFloat(document.getElementById('advAmount').value)||0,
@@ -1134,42 +1134,53 @@ i => {
         }
     }
     
-		function uploadData() {
-		const url = document.getElementById('cloudUrl').value.trim();
-		if (!url) return alert("Please enter your Google Script URL in Setup first.");
+    function uploadData() {
+        const url = document.getElementById('cloudUrl').value.trim();
+        if (!url) return alert("Please enter your Google Script URL in Setup first.");
 
-		// Update UI to show progress
-		document.getElementById('syncStatus').innerText = "Uploading data...";
-		document.getElementById('progressBarContainer').classList.remove('hidden');
-		document.getElementById('progressBar').style.width = '50%';
+        // --- GUARD LOGIC ---
+        // This checks if there is at least ONE entry in any category
+        const hasData = db && (
+            (db.entries && db.entries.length > 0) ||
+            (db.advances && db.advances.length > 0) ||
+            (db.investments && db.investments.length > 0) ||
+            (db.sales && db.sales.length > 0) ||
+            (db.payments && db.payments.length > 0)
+        );
 
-		// Convert your local database to a string
-		const payload = JSON.stringify(db);
+        if (!hasData) {
+            return alert("Your local data is empty! Add some records before trying to upload.");
+        }
 
-		fetch(url, {
-			method: 'POST',
-			// 'text/plain' is the secret handshake to avoid CORS errors with GAS
-			headers: {
-				'Content-Type': 'text/plain;charset=utf-8', 
-			},
-			body: payload
-		})
-		.then(response => response.text())
-		.then(result => {
-			document.getElementById('progressBar').style.width = '100%';
-			document.getElementById('syncStatus').innerText = "Upload Successful!";
-			document.getElementById('syncStatus').style.color = "green";
-			setTimeout(() => {
-				document.getElementById('progressBarContainer').classList.add('hidden');
-				document.getElementById('progressBar').style.width = '0%';
-			}, 2000);
-		})
-		.catch(error => {
-			console.error("Upload Error:", error);
-			document.getElementById('syncStatus').innerText = "Upload Failed! Check Console.";
-			document.getElementById('syncStatus').style.color = "red";
-		});
-	}
+        // Update UI to show progress
+        document.getElementById('syncStatus').innerText = "Uploading data...";
+        document.getElementById('progressBarContainer').classList.remove('hidden');
+        document.getElementById('progressBar').style.width = '50%';
+
+        // Send the whole db object
+        const payload = JSON.stringify(db);
+
+        fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: payload
+        })
+            .then(response => response.text())
+            .then(result => {
+                document.getElementById('progressBar').style.width = '100%';
+                document.getElementById('syncStatus').innerText = "Sync Successful!";
+                document.getElementById('syncStatus').style.color = "green";
+                setTimeout(() => {
+                    document.getElementById('progressBarContainer').classList.add('hidden');
+                    document.getElementById('progressBar').style.width = '0%';
+                }, 2000);
+            })
+            .catch(error => {
+                console.error("Upload Error:", error);
+                document.getElementById('syncStatus').innerText = "Upload Failed!";
+                document.getElementById('syncStatus').style.color = "red";
+            });
+    }
 
 
     async function downloadData(isAuto = false) { 
@@ -1224,6 +1235,31 @@ i => {
         renderAllReports();
         setupAutoSync(); // Init Sync
     };
+    // Example for saving a Work Log
+    function saveWorkEntry() {
+        // 1. Create the entry object
+        const newEntry = {
+            id: "W-" + Date.now(), // Creates a unique ID like W-17154321000
+            date: document.getElementById('workDate').value,
+            worker: document.getElementById('workerName').value,
+            type: document.getElementById('workType').value,
+            rate: parseFloat(document.getElementById('workRate').value),
+            status: document.getElementById('shiftType').value === "Full" ? 1 : 0.5,
+            farm: document.getElementById('farmName').value,
+            crop: document.getElementById('cropName').value,
+            isPaid: false
+        };
+
+        // 2. Add it to the local database (db)
+        if (!db.entries) db.entries = [];
+        db.entries.push(newEntry);
+
+        // 3. Save to LocalStorage (so data doesn't disappear if page refreshes)
+        localStorage.setItem('farmingAppData', JSON.stringify(db));
+
+        alert("Work entry saved locally! Don't forget to Upload to Cloud.");
+        // Clear form and refresh UI...
+    }
 </script>
 </body>
 </html>
