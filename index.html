@@ -448,6 +448,7 @@
 
             <div id="entry" class="tab-content">
                 <div class="grid-row">
+
                     <div class="col-form">
                         <div class="card">
                             <h3>📝 Daily Work Entry</h3>
@@ -476,14 +477,21 @@
                             <button class="btn btn-red hidden" id="btnCancelWork" onclick="resetForm()">CANCEL</button>
                         </div>
                     </div>
+
                     <div class="col-list">
                         <div class="card">
-                            <h3>📜 Recent Work</h3>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <h3 style="margin: 0;">📜 Recent Work</h3>
+                                <select id="filterWorkWorker" onchange="refreshUI()" style="padding: 5px; border-radius: 5px; border: 1px solid #ccc; width: 45%;">
+                                    <option value="">All Workers</option>
+                                </select>
+                            </div>
                             <div id="quickWorkLog" class="list-container"></div>
                         </div>
                     </div>
+
                 </div>
-            </div>
+            </div> ```
 
             <div id="invest" class="tab-content hidden">
                 <div class="grid-row">
@@ -492,14 +500,15 @@
                             <h3>🛒 Buy / Investment</h3>
                             <p style="font-size:12px; color:#666;">Fertilizers, Seeds, Nursery Plants</p>
                             <input type="hidden" id="editInvestId">
-                            
+
                             <div class="row-inputs">
                                 <div><label>Date</label><input type="date" id="invDate"></div>
                                 <div><label>For Crop</label><select id="invCrop"></select></div>
                             </div>
 
                             <div class="row-inputs">
-                                <div><label>Category</label>
+                                <div>
+                                    <label>Category</label>
                                     <select id="invCategory">
                                         <option value="Fertilizer">Fertilizer</option>
                                         <option value="Seeds">Seeds</option>
@@ -514,23 +523,28 @@
                                 <div><label>Seller / Shop</label><select id="selSellerInv"></select></div>
                                 <div><label>Total Cost (₹)</label><input type="number" id="invAmount" placeholder="0"></div>
                             </div>
-                            
+
                             <label>Notes</label>
-<input type="text" id="invNote" placeholder="Quantity or Details">
+                            <input type="text" id="invNote" placeholder="Quantity or Details">
 
-<label>Payment Status</label>
-<select id="invPayStatus">
-    <option value="Pending">🔴 Pending</option>
-    <option value="Paid">🟢 Paid</option>
-</select>
+                            <label>Payment Status</label>
+                            <select id="invPayStatus">
+                                <option value="Pending">🔴 Pending</option>
+                                <option value="Paid">🟢 Paid</option>
+                            </select>
 
-<button class="btn btn-orange" onclick="saveInvest()">SAVE PURCHASE</button>
+                            <button class="btn btn-orange" onclick="saveInvest()">SAVE PURCHASE</button>
                             <button class="btn btn-red hidden" id="btnCancelInvest" onclick="resetForm()">CANCEL</button>
                         </div>
                     </div>
                     <div class="col-list">
                         <div class="card">
-                            <h3>📉 Purchase History</h3>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <h3 style="margin: 0;">📉 Purchase History</h3>
+                                <select id="filterInvestCrop" onchange="refreshUI()" style="padding: 5px; border-radius: 5px; border: 1px solid #ccc; width: 45%;">
+                                    <option value="">All Crops</option>
+                                </select>
+                            </div>
                             <div id="investLog" class="list-container"></div>
                         </div>
                     </div>
@@ -543,7 +557,7 @@
                         <div class="card" style="border-top: 4px solid #3498db;">
                             <h3>💰 Sell Crops</h3>
                             <input type="hidden" id="editSaleId">
-                            
+
                             <div class="row-inputs">
                                 <div><label>Date</label><input type="date" id="saleDate"></div>
                                 <div><label>Crop / Title</label><select id="selCropSale"></select></div>
@@ -551,7 +565,8 @@
 
                             <div class="row-inputs">
                                 <div style="flex:2;"><label>Weight/Vol</label><input type="number" id="saleWeight" placeholder="0" oninput="calcSaleTotal()"></div>
-                                <div style="flex:1;"><label>Unit</label>
+                                <div style="flex:1;">
+                                    <label>Unit</label>
                                     <select id="saleUnit">
                                         <option value="kg">kg</option>
                                         <option value="quintal">Quintal</option>
@@ -578,7 +593,12 @@
                     </div>
                     <div class="col-list">
                         <div class="card">
-                            <h3>📈 Sales History</h3>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <h3 style="margin: 0;">📈 Sales History</h3>
+                                <select id="filterSaleCrop" onchange="refreshUI()" style="padding: 5px; border-radius: 5px; border: 1px solid #ccc; width: 45%;">
+                                    <option value="">All Crops</option>
+                                </select>
+                            </div>
                             <div id="salesLog" class="list-container"></div>
                         </div>
                     </div>
@@ -703,11 +723,11 @@
                                 <button class="btn btn-mini btn-blue" id="btnSaveUser" onclick="saveUser()">Add User</button>
                             </div>
                             <div id="userListDisplay" style="margin-top:10px;"></div>
-                            
+
                             <h4 style="margin-top:20px;">Backup & Auto Sync</h4>
                             <input type="text" id="cloudUrl" placeholder="Script URL">
                             <button class="btn btn-mini" onclick="saveCloudUrl()">Save URL</button>
-                            
+
                             <div class="row-inputs" style="margin-top:10px;">
                                 <div>
                                     <label>Auto Upload</label>
@@ -732,7 +752,7 @@
                                 <button class="btn btn-blue" onclick="uploadData()">⬆️ Upload Now</button>
                                 <button class="btn btn-blue" style="margin-top:5px;" onclick="downloadData()">⬇️ Download Now</button>
                             </div>
-                            
+
                             <div id="progressBarContainer" class="progress-container hidden">
                                 <div id="progressBar" class="progress-bar"></div>
                             </div>
@@ -1109,9 +1129,12 @@
             };
 
             fill('selWorker', db.workers, true); fill('selWorkerAdv', db.workers, true); fill('pendingFilterWorker', db.workers, true);
-            fill('selFarm', db.farms, false); fill('selCrop', db.crops, false); fill('selWorkType', db.workTypes, false);
+            fill('selFarm', db.farms, false); fill('selCrop', db.crops, false); fill('selWorkType', db.workTypes, false); fill('filterWorkWorker', db.workers, true);
             fill('rptCrop', db.crops, false); fill('invCrop', db.crops, false);
             fill('selSellerInv', db.sellers, false); fill('selBuyerSale', db.buyers, false); fill('selCropSale', db.crops, false); fill('filterAdvWorker', db.workers, true);
+            fill('filterWorkWorker', db.workers, true);  // Fills Worker filter in Work Tab
+            fill('filterInvestCrop', db.crops, false);   // Fills Crop filter in Purchase Tab
+            fill('filterSaleCrop', db.crops, false);     // Fills Crop filter in Sales Tab
 
             const allVendors = [...new Set([...db.sellers, ...db.buyers])];
             fill('rptVendor', allVendors, false);
@@ -1124,23 +1147,46 @@
                 document.getElementById(elemId).innerHTML = h || "<p style='text-align:center;color:#ccc'>No records.</p>";
             };
 
-            // 1. WORK LOG (Kept exactly as you had it)
-            renderLogList(db.entries, 'quickWorkLog', 'editWork', 'deleteWork',
-                e => `<b>${e.worker}</b> <span style="font-size:11px; color:var(--color-primary);">(${e.farm || 'No Farm'})</span><br><span style="color:#444; font-size:12px;">🌾 <b>${e.crop || 'General'}</b> • ${e.status === 0.5 ? "Half Day" : "Full Day"}</span><br><span style="color:#888; font-size:11px;">${e.date} • ${e.type}</span>`,
-                e => `<div style="text-align:right;"><span style="color:${e.isPaid ? 'green' : '#e74c3c'}; font-weight:bold; font-size:15px;">₹${(e.rate * e.status).toFixed(0)}</span><br><span style="font-size:10px; text-transform:uppercase; color:${e.isPaid ? 'green' : '#e74c3c'}; font-weight:700;">${e.isPaid ? 'Paid' : 'Pending'}</span></div>`
-            );
+            // --- 1. WORK LOG (Now with Filter) ---
+    const workFilterVal = document.getElementById('filterWorkWorker') ? document.getElementById('filterWorkWorker').value : "";
+    
+    // We create a temporary list so we don't delete your real data
+    let displayEntries = db.entries;
+    if (workFilterVal !== "") {
+        displayEntries = db.entries.filter(e => e.worker === workFilterVal);
+    }
 
-            // 2. INVEST LOG (Added Category, Note, and Payment Status)
-            renderLogList(db.investments, 'investLog', 'editInvest', 'deleteInvest',
-                i => `<div style="line-height: 1.4;"><span style="font-size: 16px; font-weight: bold; display: block; margin-bottom: 2px;">${i.item} <span style="font-size:12px; font-weight:normal; color:#888;">(${i.category || "General"})</span></span><span style="font-size: 12px; color: #555;">📅 ${i.date} • 🌾 ${i.crop || "-"} • 🏪 ${i.vendor || "-"}<br>📝 Note: ${i.note || "-"}</span></div>`,
-                i => `<div style="text-align:right;"><span style="color:${i.isPaid ? 'green' : '#e74c3c'}; font-weight:bold; font-size:16px;">₹${i.amount}</span><br><span style="font-size:10px; text-transform:uppercase; color:${i.isPaid ? 'green' : '#e74c3c'}; font-weight:700;">${i.isPaid ? 'Paid' : 'Pending'}</span></div>`
-            );
+    // This is your EXACT same code, but using 'displayEntries' instead of 'db.entries'
+    if (document.getElementById('quickWorkLog')) {
+        renderLogList(displayEntries, 'quickWorkLog', 'editWork', 'deleteWork',
+            e => `<b>${e.worker}</b> <span style="font-size:11px; color:var(--color-primary);">(${e.farm || 'No Farm'})</span><br><span style="color:#444; font-size:12px;">🌾 <b>${e.crop || 'General'}</b> • ${e.status === 0.5 ? "Half Day" : "Full Day"}</span><br><span style="color:#888; font-size:11px;">${e.date} • ${e.type}</span>`,
+            e => `<div style="text-align:right;"><span style="color:${e.isPaid ? 'green' : '#e74c3c'}; font-weight:bold; font-size:15px;">₹${(e.rate * e.status).toFixed(0)}</span><br><span style="font-size:10px; text-transform:uppercase; color:${e.isPaid ? 'green' : '#e74c3c'}; font-weight:700;">${e.isPaid ? 'Paid' : 'Pending'}</span></div>`
+        );
+    }
 
-            // 3. SALES LOG (Added Buyer, Rate, Unit breakdown, and Note)
-            renderLogList(db.sales, 'salesLog', 'editSale', 'deleteSale',
-                s => `<div class="log-title" style="margin-bottom:2px;">🌾 ${s.crop}</div><div class="log-details" style="line-height:1.4; font-size: 12px; color:#555;">📅 ${s.date} • 👤 ${s.vendor || "No Buyer"}<br>⚖️ ${s.weight} ${s.unit} @ ₹${s.rate}/${s.unit}<br>📝 Note: ${s.note || "-"}</div>`,
-                s => `<div style="text-align:right;"><span style="color:#3498db; font-weight:bold; font-size:16px;">₹${s.total}</span></div>`
-            );
+            // --- 2. INVEST LOG (Purchase History Filter) ---
+            const investLogEl = document.getElementById('investLog');
+            if (investLogEl) {
+                const invFilterVal = document.getElementById('filterInvestCrop') ? document.getElementById('filterInvestCrop').value : "";
+                let displayInvests = invFilterVal ? db.investments.filter(i => i.crop === invFilterVal) : db.investments;
+
+                renderLogList(displayInvests, 'investLog', 'editInvest', 'deleteInvest',
+                    e => `<b>${e.item}</b> <span style="font-size:11px; color:#e67e22;">(${e.category})</span><br><span style="color:#666; font-size:12px;">🌾 ${e.crop} • 🏢 ${e.seller}</span><br><span style="color:#888; font-size:11px;">${e.date}</span>`,
+                    e => `<div style="text-align:right;"><span style="color:#e67e22; font-weight:bold; font-size:15px;">₹${e.amount}</span><br><span style="font-size:10px; font-weight:700; color:${e.isPaid ? 'green' : 'red'};">${e.isPaid ? 'PAID' : 'PENDING'}</span></div>`
+                );
+            }
+
+            // --- 3. SALES LOG (Sales History Filter) ---
+            const salesLogEl = document.getElementById('salesLog');
+            if (salesLogEl) {
+                const saleFilterVal = document.getElementById('filterSaleCrop') ? document.getElementById('filterSaleCrop').value : "";
+                let displaySales = saleFilterVal ? db.sales.filter(s => s.crop === saleFilterVal) : db.sales;
+
+                renderLogList(displaySales, 'salesLog', 'editSale', 'deleteSale',
+                    e => `<b>${e.crop}</b> <span style="font-size:11px; color:#3498db;">(${e.weight} ${e.unit})</span><br><span style="color:#666; font-size:12px;">👤 ${e.buyer}</span><br><span style="color:#888; font-size:11px;">${e.date}</span>`,
+                    e => `<div style="text-align:right;"><span style="color:#3498db; font-weight:bold; font-size:15px;">₹${e.total}</span><br><span style="font-size:10px; color:#888;">₹${e.rate}/${e.unit}</span></div>`
+                );
+            }
 
             // 4. ADVANCE LOG (Matched to your HTML ID + Filter Logic Added!)
             const advFilterWorker = document.getElementById('filterAdvWorker') ? document.getElementById('filterAdvWorker').value : "";
