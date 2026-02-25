@@ -491,7 +491,7 @@
                     </div>
 
                 </div>
-            </div> ```
+            </div> 
 
             <div id="invest" class="tab-content hidden">
                 <div class="grid-row">
@@ -1141,7 +1141,7 @@
 
             const renderLogList = (data, elemId, fnEdit, fnDel, fmtMain, fmtRight) => {
                 let h = "";
-                data.slice().reverse().slice(0, 20).forEach(x => {
+                data.slice().reverse().forEach(x => {
                     h += `<div class="log-item"><div class="log-top"><div>${fmtMain(x)}</div><div class="log-amount">${fmtRight(x)}</div></div><div class="log-actions"><button class="btn-mini btn-blue" onclick="${fnEdit}('${x.id}')">Edit</button><button class="btn-mini btn-red" onclick="${fnDel}('${x.id}')">Delete</button></div></div>`;
                 });
                 document.getElementById(elemId).innerHTML = h || "<p style='text-align:center;color:#ccc'>No records.</p>";
@@ -1590,7 +1590,6 @@
                 .then(r => r.json())
                 .then(cloudDb => {
                     if (cloudDb) {
-
                         // --- SMART MERGE: Protect Local "Paid" Status ---
                         if (cloudDb.entries && db.entries) {
                             cloudDb.entries.forEach(cloudEntry => {
@@ -1602,19 +1601,28 @@
                                 }
                             });
                         }
-                        // ------------------------------------------------
 
-                        // Keeps all your original logic untouched!
-                        db.workers = cloudDb.workers || db.workers;
-                        db.farms = cloudDb.farms || db.farms;
-                        db.crops = cloudDb.crops || db.crops;
-                        db.sellers = cloudDb.sellers || db.sellers;
-                        db.buyers = cloudDb.buyers || db.buyers;
-                        db.workTypes = cloudDb.workTypes || db.workTypes;
-                        db.entries = cloudDb.entries || db.entries;
-                        db.investments = cloudDb.investments || db.investments;
-                        db.sales = cloudDb.sales || db.sales;
-                        db.advances = cloudDb.advances || db.advances;
+                        // ✨ THE FIX: BULLETPROOF SAFE MERGE ✨
+                        // This stops the Cloud from wiping your phone's Master Data if the Cloud is empty.
+                        const safeMerge = (cloudArr, localArr) => {
+                            if (!cloudArr) return localArr; // If cloud is null, keep local
+                            if (Array.isArray(cloudArr) && cloudArr.length === 0) return localArr; // If cloud sends [], keep local!
+                            return cloudArr; // Otherwise, accept the cloud data
+                        };
+
+                        // 1. Protect your Master Data (Dropdown lists)
+                        db.workers = safeMerge(cloudDb.workers, db.workers);
+                        db.farms = safeMerge(cloudDb.farms, db.farms);
+                        db.crops = safeMerge(cloudDb.crops, db.crops);
+                        db.sellers = safeMerge(cloudDb.sellers, db.sellers);
+                        db.buyers = safeMerge(cloudDb.buyers, db.buyers);
+                        db.workTypes = safeMerge(cloudDb.workTypes, db.workTypes);
+
+                        // 2. History Data (Cloud is the master here)
+                        if (cloudDb.entries) db.entries = cloudDb.entries;
+                        if (cloudDb.investments) db.investments = cloudDb.investments;
+                        if (cloudDb.sales) db.sales = cloudDb.sales;
+                        if (cloudDb.advances) db.advances = cloudDb.advances;
 
                         saveDB();
                         refreshUI();
@@ -1622,7 +1630,7 @@
                     }
                 })
                 .catch(e => {
-                    console.log("Download failed");
+                    console.log("Download failed", e);
                     document.getElementById('syncStatus').innerText = "Download Failed!";
                 });
         }
